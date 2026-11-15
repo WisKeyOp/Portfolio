@@ -1,6 +1,18 @@
 import { useState } from 'react';
 import type { FC } from 'react';
-import { Cpu, CheckCircle, Terminal, Play, RotateCcw, AlertTriangle, ShieldCheck } from 'lucide-react';
+import { 
+  Cpu, 
+  CheckCircle, 
+  Terminal, 
+  Play, 
+  RotateCcw, 
+  AlertTriangle, 
+  ShieldCheck,
+  Workflow,
+  Code2
+} from 'lucide-react';
+import { FlowDesignView } from './FlowDesignView';
+import { MermaidViewer } from './MermaidViewer';
 
 type IncidentState = 'IDLE' | 'TRIGGERED' | 'VERIFYING' | 'DISPATCHED' | 'ESCALATED' | 'ON_SCENE' | 'TRANSPORTING' | 'RESOLVED' | 'CANCELLED';
 
@@ -11,8 +23,105 @@ interface LogEntry {
   details: string;
 }
 
+const TOPOLOGY_MERMAID = `flowchart LR
+    classDef edge fill:#091E2A,stroke:#06B6D4,stroke-width:1px,color:#CFFAFE;
+    classDef service fill:#141738,stroke:#6366F1,stroke-width:1px,color:#E0E7FF;
+    classDef security fill:#2A1E0D,stroke:#F59E0B,stroke-width:1px,color:#FEF3C7;
+    classDef core fill:#2A0F1E,stroke:#F43F5E,stroke-width:1px,color:#FFE4E6;
+    classDef dispatch fill:#0D2818,stroke:#10B981,stroke-width:1px,color:#D1FAE5;
+
+    subgraph E["1. Edge Telematics"]
+        W1["Apple Watch (watchOS)"]:::edge
+        W2["Wear OS / BLE Sensors"]:::edge
+        W3["Health Connect (Android)"]:::edge
+    end
+
+    subgraph DRQ["2. Wearable Telemetry Service (:8001)"]
+        Ingest["Vitals Ingest Handler\n(600/min per user)"]:::service
+        Gaussian["14-Day Rolling\nGaussian Baseline"]:::service
+        RiskEngine["9 Deterministic Rules\n(Cardiac · Accel · SpO2)"]:::service
+    end
+
+    subgraph Sec["3. Security Gateway"]
+        HMAC["Internal HMAC Key\n(Constant-Time SHA-256)"]:::security
+    end
+
+    subgraph Plat["4. Dash Platform Service (:8000)"]
+        OCC["9-State Incident Machine\n(Optimistic Concurrency Control)"]:::core
+        PartialIndex[("Postgres Partial Index\nidx_one_active_incident")]:::core
+        AuditLog[("IncidentStateLog\nImmutable Audit Trail")]:::core
+        LangGraph["LangGraph Triage Agent\n(BM25 + pgvector Hybrid)"]:::core
+    end
+
+    subgraph Mesh["5. Multi-Tier Response Mesh"]
+        T1["Tier-1 EMS Ambulance"]:::dispatch
+        T2["Tier-2 Hospital Trauma Center"]:::dispatch
+        T3["Tier-3 Verified Responders"]:::dispatch
+    end
+
+    W1 & W2 & W3 -->|Vitals Batch| Ingest
+    Ingest --> Gaussian --> RiskEngine
+    RiskEngine -->|Anomaly Alert| HMAC
+    HMAC -->|X-Internal-Key Verified| OCC
+    OCC --> PartialIndex
+    OCC --> AuditLog
+    OCC --> LangGraph
+    OCC -->|Grace Timeout| T1
+    OCC -->|Trauma Pre-Alert| T2
+    OCC -->|Escalation Timeout| T3`;
+
+const STATEMACHINE_MERMAID = `stateDiagram-v2
+    [*] --> IDLE: Normal Baseline
+    IDLE --> TRIGGERED: Hardware Crash / 4.2G Deceleration
+    TRIGGERED --> VERIFYING: 10s Grace Window Starts
+    
+    VERIFYING --> CANCELLED: Wearer Taps "I'm OK" (Lock Released)
+    VERIFYING --> DISPATCHED: Grace Timeout Expires (Tier-1 Rolling)
+    
+    DISPATCHED --> ESCALATED: No Responder ACK in 3 mins
+    DISPATCHED --> ON_SCENE: Ambulance Arrives at Coordinates
+    ESCALATED --> ON_SCENE: Tier-3 Responders Arrive
+    
+    ON_SCENE --> TRANSPORTING: Patient Loaded into Ambulance
+    TRANSPORTING --> RESOLVED: Hospital Admitted (Lock Released)
+    
+    CANCELLED --> [*]
+    RESOLVED --> [*]`;
+
+const LANGGRAPH_MERMAID = `flowchart TD
+    classDef input fill:#091E2A,stroke:#06B6D4,stroke-width:1px,color:#CFFAFE;
+    classDef gate fill:#2A0F1E,stroke:#F43F5E,stroke-width:1px,color:#FFE4E6;
+    classDef agent fill:#141738,stroke:#6366F1,stroke-width:1px,color:#E0E7FF;
+    classDef tool fill:#221338,stroke:#A855F7,stroke-width:1px,color:#F3E8FF;
+    classDef guard fill:#2A1E0D,stroke:#F59E0B,stroke-width:1px,color:#FEF3C7;
+    classDef out fill:#0D2818,stroke:#10B981,stroke-width:1px,color:#D1FAE5;
+
+    In(["Voice / Vitals Telemetry Input"]):::input --> SafetyGate{"1. Deterministic Safety Gate"}:::gate
+    
+    SafetyGate -->|Acute Red-Flag Symptoms\nChest Crushing Pain / Asphyxia| SOS["Immediate Emergency Escalation\n(Zero-LLM Fast Path · Tier-1 Dispatch)"]:::gate
+    SafetyGate -->|Non-Critical Symptoms| Hybrid["2. Hybrid Medical RAG\nDense pgvector + Sparse BM25"]:::agent
+    
+    Hybrid --> ToolAgent["3. Clinical Tooling Node\n(LangGraph State Machine)"]:::agent
+    
+    subgraph ToolServer["Verified Clinical Tool Server"]
+        D1["18 Drug Interaction Classes"]:::tool
+        D2["Pediatric / Geriatric Bounds"]:::tool
+        D3["Longitudinal Health History"]:::tool
+    end
+    
+    ToolAgent <--> ToolServer
+    ToolAgent --> Guard{"4. Regulatory Guardrail\n(Module C Safety Floor)"}:::guard
+    
+    Guard -->|Prescription Attempt| Refuse["Conservative Refusal\n(Prohibit Unverified Prescriptions)"]:::guard
+    Guard -->|Verified First-Aid| Deliver["5. Bilingual Delivery\n(Hindi & English Cadence)"]:::out
+    
+    Deliver --> Commit[("LangSmith Trace &\nImmutable Audit Commit")]:::out
+    Refuse --> Commit
+    SOS --> Commit`;
+
 export const ArchitectureDeepDive: FC = () => {
   const [activeTab, setActiveTab] = useState<'topology' | 'statemachine' | 'langgraph' | 'simulator'>('topology');
+  const [viewStyle, setViewStyle] = useState<'ui-flow' | 'mermaid'>('ui-flow');
 
   // Simulator state
   const [simState, setSimState] = useState<IncidentState>('IDLE');
@@ -107,7 +216,9 @@ export const ArchitectureDeepDive: FC = () => {
   return (
     <section id="architecture" className="py-20 border-b border-white/5 bg-[#080B11]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
+        
+        {/* Section Header */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
           <div>
             <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-sky-500/10 text-sky-400 text-xs font-mono font-medium border border-sky-500/20">
               <Cpu className="w-3.5 h-3.5" />
@@ -117,7 +228,7 @@ export const ArchitectureDeepDive: FC = () => {
               DashResQ Distributed Architecture
             </h2>
             <p className="mt-1 text-sm text-slate-400 max-w-2xl">
-              Engineered from scratch to solve the life-critical race condition: sensor jitter and retry storms must never trigger double dispatches or dropped alerts.
+              Engineered to resolve life-critical race conditions: sensor jitter and cellular retry storms must never trigger double dispatches or dropped alerts.
             </p>
           </div>
 
@@ -167,263 +278,95 @@ export const ArchitectureDeepDive: FC = () => {
           </div>
         </div>
 
-        {/* Tab 1: Dual-Service Topology */}
-        {activeTab === 'topology' && (
-          <div className="p-6 sm:p-8 rounded-2xl bg-slate-900/60 border border-slate-800">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-              <div className="lg:col-span-7">
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-xs font-mono text-indigo-400 font-semibold uppercase tracking-wider">
-                    Distributed Service Boundaries & Gateway
-                  </span>
-                  <span className="text-xs font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                    299 Endpoints | 86 Tables
-                  </span>
-                </div>
-
-                <div className="p-5 rounded-xl bg-black/70 border border-slate-800 font-mono text-xs text-slate-300 leading-relaxed overflow-x-auto">
-                  <div className="text-sky-400 font-semibold mb-2"># Dual-Service Ingestion & Escalation Topology</div>
-                  <pre className="text-[11.5px] leading-tight text-slate-300">
-{`[ Edge Telemetry Layer ]
-   Apple Watch (watchOS) ──┐
-   Wear OS / BLE Sensors  ──┼──> [DRQ Telemetry Service :8001]
-   Health Connect (Android)─┘     │ High-throughput Ingestion (600/min)
-                                  │ Rolling 14-Day Baseline Worker
-                                  │ Deterministic 9 Risk Rules Engine
-                                  │
-                                  ▼ (Internal HMAC: /internal/v1/incidents)
-[ Dash Platform Service :8000 ] <─┘
-   ├── Incident Escalation State Machine (OCC Guard)
-   ├── LangGraph Clinical Triage Agent (BM25 + pgvector)
-   ├── Multi-Tier Responder Orchestrator (Ambulance / Clinicians)
-   ├── SIWA / JWT Auth + Rotating Refresh & Revocation
-   └── WebSocket Topics (Real-Time Live Vitals & Map)`}
-                  </pre>
-                </div>
-
-                <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800/80">
-                    <div className="text-xs font-mono font-bold text-white mb-1">
-                      Platform Service (:8000)
-                    </div>
-                    <p className="text-xs text-slate-400 leading-relaxed">
-                      Orchestrates user auth, emergency circles, responder assignments, real-time WebSocket topics, and the incident life cycle.
-                    </p>
-                  </div>
-                  <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800/80">
-                    <div className="text-xs font-mono font-bold text-white mb-1">
-                      Wearable Service (:8001)
-                    </div>
-                    <p className="text-xs text-slate-400 leading-relaxed">
-                      Stateless JWT-authenticated high-throughput vitals ingestion engine maintaining 14-day rolling Gaussian baselines.
-                    </p>
-                  </div>
-                </div>
+        {/* ── VIEW MODE SELECTOR (UI FLOW DESIGN VS MERMAID CODE) ── */}
+        {activeTab !== 'simulator' && (
+          <div className="flex items-center justify-between mb-6 pb-3 border-b border-slate-800/80">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-mono text-slate-400">RENDER VIEW:</span>
+              <div className="inline-flex items-center p-1 rounded-lg bg-slate-900 border border-slate-800">
+                <button
+                  onClick={() => setViewStyle('ui-flow')}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1 rounded text-xs font-mono font-bold transition-all cursor-pointer ${
+                    viewStyle === 'ui-flow'
+                      ? 'bg-indigo-600 text-white shadow-sm'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  <Workflow className="w-3.5 h-3.5" />
+                  <span>Interactive UI Flow Design</span>
+                </button>
+                <button
+                  onClick={() => setViewStyle('mermaid')}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1 rounded text-xs font-mono font-bold transition-all cursor-pointer ${
+                    viewStyle === 'mermaid'
+                      ? 'bg-indigo-600 text-white shadow-sm'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  <Code2 className="w-3.5 h-3.5" />
+                  <span>Mermaid Flow & Code</span>
+                </button>
               </div>
+            </div>
 
-              <div className="lg:col-span-5 space-y-4">
-                <h3 className="text-sm font-mono font-semibold uppercase tracking-wider text-slate-300">
-                  Architectural Invariants Enforced
-                </h3>
-
-                <div className="p-4 rounded-xl bg-slate-950/70 border border-slate-800">
-                  <div className="flex items-center gap-2 text-xs font-bold text-emerald-400 mb-1">
-                    <CheckCircle className="w-4 h-4" />
-                    Stateless Inter-Service Auth
-                  </div>
-                  <p className="text-xs text-slate-400">
-                    Shared canonical schemas in <code className="text-indigo-300">packages/shared_schemas</code>; cross-service calls validated via constant-time HMAC headers.
-                  </p>
-                </div>
-
-                <div className="p-4 rounded-xl bg-slate-950/70 border border-slate-800">
-                  <div className="flex items-center gap-2 text-xs font-bold text-emerald-400 mb-1">
-                    <CheckCircle className="w-4 h-4" />
-                    Background Worker Isolation
-                  </div>
-                  <p className="text-xs text-slate-400">
-                    Guarded via <code className="text-indigo-300">BACKGROUND_WORKERS_ENABLED=False</code> on horizontally scaled web pods to eliminate concurrent timeout loop execution.
-                  </p>
-                </div>
-
-                <div className="p-4 rounded-xl bg-slate-950/70 border border-slate-800">
-                  <div className="flex items-center gap-2 text-xs font-bold text-emerald-400 mb-1">
-                    <CheckCircle className="w-4 h-4" />
-                    Non-Blocking Stream Ingest
-                  </div>
-                  <p className="text-xs text-slate-400">
-                    Handles 600 events/min per user with async batches into PostgreSQL and Redis rate limiting (SlowAPI).
-                  </p>
-                </div>
-              </div>
+            <div className="hidden sm:flex items-center gap-3 text-xs font-mono text-slate-500">
+              <span>CANONICAL: packages/shared_schemas</span>
+              <span>•</span>
+              <span className="text-emerald-400">OCC: ENFORCED</span>
             </div>
           </div>
         )}
 
-        {/* Tab 2: 9-State OCC Escalation State Machine */}
-        {activeTab === 'statemachine' && (
-          <div className="p-6 sm:p-8 rounded-2xl bg-slate-900/60 border border-slate-800">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-              <div className="lg:col-span-7">
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-xs font-mono text-indigo-400 font-semibold uppercase tracking-wider">
-                    OCC State Machine & Lock Strategy
-                  </span>
-                  <span className="text-xs font-mono px-2 py-0.5 rounded bg-sky-500/10 text-sky-400 border border-sky-500/20">
-                    PostgreSQL Partial Unique Index
-                  </span>
-                </div>
-
-                <div className="p-5 rounded-xl bg-black/70 border border-slate-800 font-mono text-xs text-slate-300 leading-relaxed overflow-x-auto">
-                  <div className="text-emerald-400 font-semibold mb-2"># State Transitions & Concurrency Invariant</div>
-                  <pre className="text-[11.5px] leading-tight text-slate-300">
-{`[TRIGGERED] (Hardware Crash / Telemetry Anomaly)
-    │
-    ▼ (10s countdown grace window)
-[VERIFYING] ──────> User cancels ("I'm OK") ───> [CANCELLED] (Terminal)
-    │
-    ▼ (Grace timeout expires)
-[DISPATCHED] (Tier-1 Ambulance & Tier-2 Clinicians notified)
-    │
-    ├──> Escalation Timeout ───> [ESCALATED] (Tier-3 Field Responders)
-    ├──> Clinician Arrived ────> [ON_SCENE]
-    └──> Responder Handshake ──> [TRANSPORTING]
-                                     │
-                                     ▼
-                                 [RESOLVED] (Terminal Audit Record)`}
-                  </pre>
-                </div>
-
-                <div className="mt-5 p-4 rounded-xl bg-black/50 border border-slate-800 font-mono text-xs text-slate-400">
-                  <span className="text-sky-400">-- PostgreSQL Concurrency Guardrail:</span>
-                  <div className="text-slate-300 mt-1">
-                    CREATE UNIQUE INDEX idx_one_active_incident_per_user ON incidents (user_id)<br/>
-                    WHERE status NOT IN ('RESOLVED', 'CANCELLED', 'FALSE_ALARM');
-                  </div>
-                </div>
-              </div>
-
-              <div className="lg:col-span-5 space-y-4">
-                <h3 className="text-sm font-mono font-semibold uppercase tracking-wider text-slate-300">
-                  Failure-Mode Mitigations
-                </h3>
-
-                <div className="p-4 rounded-xl bg-slate-950/70 border border-slate-800">
-                  <div className="text-xs font-bold text-indigo-400 mb-1">
-                    Zero Duplicate Dispatches
-                  </div>
-                  <p className="text-xs text-slate-400">
-                    The database-level partial unique index physically prevents concurrent insertion of two active emergencies for the same user, even under extreme cellular packet retry storms.
-                  </p>
-                </div>
-
-                <div className="p-4 rounded-xl bg-slate-950/70 border border-slate-800">
-                  <div className="text-xs font-bold text-indigo-400 mb-1">
-                    Deterministic Incident State Log
-                  </div>
-                  <p className="text-xs text-slate-400">
-                    Every transition writes an immutable <code className="text-indigo-300">IncidentStateLog</code> record with monotonic timestamps, actor metadata, and prior state verification.
-                  </p>
-                </div>
-
-                <div className="p-4 rounded-xl bg-slate-950/70 border border-slate-800">
-                  <div className="text-xs font-bold text-indigo-400 mb-1">
-                    Optimistic Concurrency Control (OCC)
-                  </div>
-                  <p className="text-xs text-slate-400">
-                    State mutation uses version-checked updates; stale updates trigger explicit retry re-reads rather than overwriting parallel clinician check-ins.
-                  </p>
+        {/* Tab 1: Dual-Service Topology */}
+        {activeTab === 'topology' && (
+          viewStyle === 'ui-flow' ? (
+            <FlowDesignView type="topology" />
+          ) : (
+            <div className="space-y-6">
+              <MermaidViewer chart={TOPOLOGY_MERMAID} id="topology-flow" />
+              <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800 font-mono text-xs text-slate-300">
+                <div className="text-indigo-400 font-bold mb-1">Topology Invariants:</div>
+                <div className="text-slate-400 leading-relaxed">
+                  Stateless inter-service JWT authorization, dedicated private HMAC channel (<code className="text-indigo-300">X-Internal-Key</code>), and strict decoupling between edge ingestion (:8001) and incident orchestration (:8000).
                 </div>
               </div>
             </div>
-          </div>
+          )
+        )}
+
+        {/* Tab 2: 9-State OCC Machine */}
+        {activeTab === 'statemachine' && (
+          viewStyle === 'ui-flow' ? (
+            <FlowDesignView type="statemachine" />
+          ) : (
+            <div className="space-y-6">
+              <MermaidViewer chart={STATEMACHINE_MERMAID} id="statemachine-flow" />
+              <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800 font-mono text-xs text-slate-300">
+                <div className="text-rose-400 font-bold mb-1">PostgreSQL OCC Invariant:</div>
+                <div className="text-slate-400 leading-relaxed">
+                  <code className="text-indigo-300">CREATE UNIQUE INDEX idx_one_active_incident_per_user ON incidents (user_id) WHERE status NOT IN ('RESOLVED', 'CANCELLED', 'FALSE_ALARM');</code>
+                  <br />Physically eliminates dual-ambulance dispatch under identical cellular retry storms.
+                </div>
+              </div>
+            </div>
+          )
         )}
 
         {/* Tab 3: LangGraph Triage Flow */}
         {activeTab === 'langgraph' && (
-          <div className="p-6 sm:p-8 rounded-2xl bg-slate-900/60 border border-slate-800">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-              <div className="lg:col-span-7">
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-xs font-mono text-indigo-400 font-semibold uppercase tracking-wider">
-                    LangGraph Stateful Multi-Agent Pipeline
-                  </span>
-                  <span className="text-xs font-mono px-2 py-0.5 rounded bg-purple-500/10 text-purple-400 border border-purple-500/20">
-                    BM25 + pgvector Hybrid Retrieval
-                  </span>
-                </div>
-
-                <div className="p-5 rounded-xl bg-black/70 border border-slate-800 font-mono text-xs text-slate-300 leading-relaxed overflow-x-auto">
-                  <div className="text-purple-400 font-semibold mb-2"># LangGraph Autonomous Triage Cycle</div>
-                  <pre className="text-[11.5px] leading-tight text-slate-300">
-{`[Voice / Text Telemetry Input]
-   │
-   ▼
-[1. Deterministic Safety Gate] ─── Red-flag Symptoms? ───> Immediate SOS Trigger
-   │ (Non-hallucinatory keyword floor)
-   ▼
-[2. Medical Context Retrieval]
-   ├── Dense Vector Search (pgvector cosine similarity)
-   └── Sparse Keyword Match (BM25 clinical guideline terms)
-   │
-   ▼
-[3. Clinical Tool-Calling Node]
-   ├── Drug Interaction Engine (18 pharmacological classes)
-   ├── Pediatric / Geriatric Dosage Boundary Checks
-   └── Longitudinal Health History Injector
-   │
-   ▼
-[4. Bilingual Safety Formulation] (Hindi / English)
-   │ (Deterministic prohibition of unverified prescriptions)
-   ▼
-[5. Structured State Transition & Audit Log Commit]`}
-                  </pre>
-                </div>
-
-                <div className="mt-5 p-4 rounded-xl bg-slate-950/60 border border-slate-800/80">
-                  <div className="text-xs font-mono font-bold text-white mb-1">
-                    Regulatory & Observability Guardrails
-                  </div>
-                  <p className="text-xs text-slate-400 leading-relaxed">
-                    Designed strictly under Module C guidelines: AI assists triage context aggregation but never dispenses ungrounded prescription advice. LangSmith tracing active across all turns.
-                  </p>
-                </div>
-              </div>
-
-              <div className="lg:col-span-5 space-y-4">
-                <h3 className="text-sm font-mono font-semibold uppercase tracking-wider text-slate-300">
-                  Agentic Safety Invariants
-                </h3>
-
-                <div className="p-4 rounded-xl bg-slate-950/70 border border-slate-800">
-                  <div className="text-xs font-bold text-purple-400 mb-1">
-                    Zero Medical Hallucinations
-                  </div>
-                  <p className="text-xs text-slate-400">
-                    Guideline retrieval is bound to verified medical corpora with strict minimum cosine similarity thresholds and human-in-the-loop escalation paths.
-                  </p>
-                </div>
-
-                <div className="p-4 rounded-xl bg-slate-950/70 border border-slate-800">
-                  <div className="text-xs font-bold text-purple-400 mb-1">
-                    Deterministic State Boundaries
-                  </div>
-                  <p className="text-xs text-slate-400">
-                    Defensive None-checking at all node boundaries; failures gracefully route to conservative triage escalation rather than unhandled exception crashes.
-                  </p>
-                </div>
-
-                <div className="p-4 rounded-xl bg-slate-950/70 border border-slate-800">
-                  <div className="text-xs font-bold text-purple-400 mb-1">
-                    Tenant & Patient Data Isolation
-                  </div>
-                  <p className="text-xs text-slate-400">
-                    All vector searches enforce patient ID filter masks at the PostgreSQL query level to physically eliminate cross-patient context leakage.
-                  </p>
+          viewStyle === 'ui-flow' ? (
+            <FlowDesignView type="langgraph" />
+          ) : (
+            <div className="space-y-6">
+              <MermaidViewer chart={LANGGRAPH_MERMAID} id="langgraph-flow" />
+              <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800 font-mono text-xs text-slate-300">
+                <div className="text-purple-400 font-bold mb-1">Agentic Safety Floor Invariants:</div>
+                <div className="text-slate-400 leading-relaxed">
+                  Deterministic fast-path for acute cardiac/asphyxia distress bypassing LLM latency, hybrid BM25 + dense pgvector retrieval, 18 drug interaction classes, and conservative refusal on unverified prescription generation.
                 </div>
               </div>
             </div>
-          </div>
+          )
         )}
 
         {/* Tab 4: Live OCC Simulator */}
@@ -577,6 +520,7 @@ export const ArchitectureDeepDive: FC = () => {
             </div>
           </div>
         )}
+
       </div>
     </section>
   );

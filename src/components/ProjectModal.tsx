@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import type { FC } from 'react';
-import { X, ExternalLink, CheckCircle2, AlertTriangle, ShieldCheck, Layers } from 'lucide-react';
+import { X, ExternalLink, CheckCircle2, AlertTriangle, ShieldCheck, Layers, Workflow } from 'lucide-react';
 import type { Project } from '../data/portfolio-data';
 import { GithubIcon } from './Icons';
+import { FlowDesignView } from './FlowDesignView';
 
 interface ProjectModalProps {
   project: Project | null;
@@ -9,12 +11,16 @@ interface ProjectModalProps {
 }
 
 export const ProjectModal: FC<ProjectModalProps> = ({ project, onClose }) => {
+  const [modalFlowType, setModalFlowType] = useState<'topology' | 'statemachine' | 'langgraph'>('topology');
+
   if (!project) return null;
+
+  const isDashResQ = project.id.toLowerCase().includes('dashresq');
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-sm overflow-y-auto animate-in fade-in duration-200">
       <div 
-        className="relative w-full max-w-3xl rounded-2xl bg-[#0D121F] border border-slate-700/80 shadow-2xl p-6 sm:p-8 my-8 max-h-[90vh] overflow-y-auto text-left"
+        className="relative w-full max-w-4xl rounded-2xl bg-[#0D121F] border border-slate-700/80 shadow-2xl p-6 sm:p-8 my-8 max-h-[90vh] overflow-y-auto text-left"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
@@ -53,7 +59,7 @@ export const ProjectModal: FC<ProjectModalProps> = ({ project, onClose }) => {
               href={project.liveUrl}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-xs font-mono font-medium text-white transition-all shadow-sm"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-xs font-mono font-medium text-white transition-all shadow-sm cursor-pointer"
             >
               <ExternalLink className="w-3.5 h-3.5" />
               <span>Live Deployment</span>
@@ -64,7 +70,7 @@ export const ProjectModal: FC<ProjectModalProps> = ({ project, onClose }) => {
               href={project.githubUrl}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-800/60 hover:bg-slate-700 text-xs font-mono text-slate-200 transition-all"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-800/60 hover:bg-slate-700 text-xs font-mono text-slate-200 transition-all cursor-pointer"
             >
               <GithubIcon className="w-3.5 h-3.5" />
               <span>Source Repository</span>
@@ -91,6 +97,47 @@ export const ProjectModal: FC<ProjectModalProps> = ({ project, onClose }) => {
           </p>
         </div>
 
+        {/* Interactive UI Flow Design for Flagship Architecture */}
+        {isDashResQ && (
+          <div className="mt-8 pt-6 border-t border-slate-800">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+              <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-indigo-400 font-semibold">
+                <Workflow className="w-4 h-4" />
+                <span>Architecture UI Flow Design</span>
+              </div>
+
+              <div className="inline-flex items-center p-1 rounded-lg bg-slate-900 border border-slate-800 text-xs font-mono gap-1">
+                <button
+                  onClick={() => setModalFlowType('topology')}
+                  className={`px-2.5 py-1 rounded transition-colors cursor-pointer ${
+                    modalFlowType === 'topology' ? 'bg-indigo-600 text-white font-bold' : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  Topology Flow
+                </button>
+                <button
+                  onClick={() => setModalFlowType('statemachine')}
+                  className={`px-2.5 py-1 rounded transition-colors cursor-pointer ${
+                    modalFlowType === 'statemachine' ? 'bg-indigo-600 text-white font-bold' : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  OCC State Machine
+                </button>
+                <button
+                  onClick={() => setModalFlowType('langgraph')}
+                  className={`px-2.5 py-1 rounded transition-colors cursor-pointer ${
+                    modalFlowType === 'langgraph' ? 'bg-indigo-600 text-white font-bold' : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  LangGraph Triage
+                </button>
+              </div>
+            </div>
+
+            <FlowDesignView type={modalFlowType} />
+          </div>
+        )}
+
         {/* Architecture Points */}
         <div className="mt-6">
           <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-indigo-400 font-semibold mb-3">
@@ -100,7 +147,7 @@ export const ProjectModal: FC<ProjectModalProps> = ({ project, onClose }) => {
           <div className="space-y-2.5">
             {project.architecturePoints.map((point, i) => (
               <div key={i} className="p-3 rounded-lg bg-slate-900/80 border border-slate-800/80 flex items-start gap-2.5">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" />
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 mt-0.5 flex-shrink-0" />
                 <span className="text-xs text-slate-300 leading-relaxed">{point}</span>
               </div>
             ))}
@@ -116,7 +163,7 @@ export const ProjectModal: FC<ProjectModalProps> = ({ project, onClose }) => {
           <div className="space-y-2.5">
             {project.failureModes.map((fm, i) => (
               <div key={i} className="p-3 rounded-lg bg-amber-500/5 border border-amber-500/20 flex items-start gap-2.5">
-                <ShieldCheck className="w-4 h-4 text-amber-400 mt-0.5 flex-shrink-0" />
+                <ShieldCheck className="w-3.5 h-3.5 text-amber-400 mt-0.5 flex-shrink-0" />
                 <span className="text-xs text-slate-300 leading-relaxed">{fm}</span>
               </div>
             ))}

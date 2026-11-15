@@ -196,7 +196,7 @@ export const TelemetryMissionControl: FC = () => {
   }, []);
 
   return (
-    <section id="projects" className="py-16 sm:py-24 border-b border-white/10 bg-[#07090F] relative overflow-hidden">
+    <section id="telemetry-grid" className="py-16 sm:py-24 border-b border-white/10 bg-[#07090F] relative overflow-hidden">
       {/* Background ambient lighting */}
       <div className="absolute top-1/4 left-1/4 w-[500px] h-[400px] bg-indigo-600/10 blur-[140px] pointer-events-none rounded-full" />
       <div className="absolute bottom-1/4 right-1/4 w-[450px] h-[350px] bg-rose-600/10 blur-[130px] pointer-events-none rounded-full" />
@@ -633,3 +633,4 @@ export const TelemetryMissionControl: FC = () => {
     </section>
   );
 };
+
