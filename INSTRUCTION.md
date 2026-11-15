@@ -29,6 +29,10 @@ The Portfolio application is a high-performance, statically compiled showcase en
   1. *Dual-Service Topology*: DRQ Telemetry (:8001) vs Platform (:8000), internal HMAC bridge, and worker isolation.
   2. *9-State OCC Escalation*: Postgres partial unique index preventing duplicate dispatches.
   3. *LangGraph Triage Pipeline*: BM25 + dense pgvector hybrid retrieval with deterministic safety floors.
+  4. *Live OCC Simulator*: Interactive state machine testing scenario triggers, duplicate packet collision block, and append-only audit trail.
+- **`src/components/FlowDesignView.tsx`**: Interactive visual UI Flow Design displaying horizontal pipeline cards, benchmarks, invariants, and audited implementation code drawers.
+- **`src/components/MermaidViewer.tsx`**: Dynamic browser-compiled Mermaid vector diagrams (`flowchart LR`, `stateDiagram-v2`, `flowchart TD`) with dark theme styling, code inspection toggle, and one-click clipboard copying.
+- **`src/components/ProjectModal.tsx`**: Expanded full-screen architecture modal embedded with `FlowDesignView` for interactive system inspection.
 - **`src/components/ExperienceSection.tsx`**: Enterprise track record at Ernst & Young (Associate Consultant & Intern) and Veda AI.
 - **`src/components/CompetitiveSection.tsx`**: Algorithmic rigor metrics (LeetCode, Codeforces, Adobe Hackathon semifinalist, BIT Mesra degree).
 - **`src/components/AxiomsSection.tsx`**: Encapsulates the failure-mode analyst ethos: Decision Priority Hierarchy, Optimistic Concurrency Control, and Agentic Safety Floors.

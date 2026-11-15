@@ -10,7 +10,8 @@ import {
   CheckCircle2, 
   Zap, 
   Radio, 
-  Maximize2
+  Maximize2,
+  Workflow
 } from 'lucide-react';
 import { TELEMETRY_NODES, TOPOLOGY_LINKS } from '../data/telemetry-nodes';
 import type { TelemetryNode } from '../data/telemetry-nodes';
@@ -569,13 +570,25 @@ export const TelemetryMissionControl: FC = () => {
 
               {/* Action Buttons */}
               <div className="mt-6 pt-4 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-3">
-                <button
-                  onClick={() => openFullModal(activeNode)}
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-xs font-mono font-bold text-white transition-all shadow-md shadow-indigo-600/30 cursor-pointer"
-                >
-                  <Maximize2 className="w-3.5 h-3.5" />
-                  <span>Inspect Full System Design</span>
-                </button>
+                <div className="flex flex-wrap items-center gap-2">
+                  <button
+                    onClick={() => openFullModal(activeNode)}
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-xs font-mono font-bold text-white transition-all shadow-md shadow-indigo-600/30 cursor-pointer"
+                  >
+                    <Maximize2 className="w-3.5 h-3.5" />
+                    <span>Inspect Full System Design</span>
+                  </button>
+
+                  {activeNode.id === 'dashresq' && (
+                    <a
+                      href="#architecture"
+                      className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-slate-700 bg-slate-900/80 hover:bg-slate-800 text-xs font-mono font-semibold text-slate-300 hover:text-white transition-all"
+                    >
+                      <Workflow className="w-3.5 h-3.5 text-indigo-400" />
+                      <span>Architecture Flow ↓</span>
+                    </a>
+                  )}
+                </div>
 
                 <div className="flex items-center gap-2">
                   {activeNode.details.githubUrl && (

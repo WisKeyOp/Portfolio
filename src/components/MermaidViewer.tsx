@@ -141,3 +141,4 @@ export const MermaidViewer: FC<MermaidViewerProps> = ({ chart, id }) => {
     </div>
   );
 };
+
