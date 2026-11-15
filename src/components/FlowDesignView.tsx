@@ -15,7 +15,7 @@ interface FlowNode {
   title: string;
   subtitle: string;
   badge: string;
-  color: string; // 'indigo' | 'emerald' | 'amber' | 'rose' | 'purple' | 'cyan'
+  color: string;
   metrics: string;
   invariants: string[];
   failureMitigation: string;
@@ -35,13 +35,13 @@ export const FlowDesignView: FC<FlowDesignViewProps> = ({ type }) => {
       title: 'Sensors & Wearables',
       subtitle: 'Apple Watch, Wear OS, BLE Accelerometers, Health Connect',
       badge: 'Edge Ingest',
-      color: 'cyan',
+      color: 'blue',
       metrics: 'Raw 50Hz Accel + ECG',
       invariants: [
         'Local sensor debouncing on device before radio transmission',
         'Offline batch caching during cellular dropout with monotonic timestamping'
       ],
-      failureMitigation: 'Hardware noise is filtered via Kalman filtering on edge.',
+      failureMitigation: 'Hardware noise is filtered via edge-level Kalman filtering.',
       codeSnippet: `// Edge sample dispatch
 let packet = VitalsBatch(
     timestamp: Date().timeIntervalSince1970,
@@ -57,27 +57,26 @@ try await radio.streamBatch(packet)`
       title: 'DRQ Ingestion Engine (:8001)',
       subtitle: 'FastAPI High-Throughput Worker + 14-Day Gaussian Baseline',
       badge: 'Port :8001',
-      color: 'indigo',
+      color: 'brand',
       metrics: '600 vitals/min per user',
       invariants: [
-        'Stateless HS256/RS256 JWT claim verification without DB hits',
+        'Stateless HS256/RS256 JWT claim verification without DB roundtrips',
         'Rolling 14-day Gaussian mean/sigma computation per biometric stream',
         '9 Deterministic risk rules evaluated in <4ms'
       ],
-      failureMitigation: 'Redis rate limiting (SlowAPI) throttles client reconnect loops.',
+      failureMitigation: 'Redis rate limiting (SlowAPI) throttles client reconnect storms.',
       codeSnippet: `@router.post("/api/v1/vitals/batch")
 async def ingest_vitals(
     batch: VitalsBatchSchema,
     user: AuthUser = Depends(verify_jwt_stateless)
 ):
-    # Non-blocking async queue
     await baseline_engine.enqueue(user.id, batch)
     if risk_rules.evaluate_anomaly(batch):
         await trigger_platform_escalation(user.id, batch)`
     },
     {
       id: 'hmac_bridge',
-      category: '3. Security Boundary',
+      category: '3. Security Gateway',
       title: 'Constant-Time HMAC Bridge',
       subtitle: 'Internal Service-to-Service Cryptographic Interlock',
       badge: 'X-Internal-Key',
@@ -100,7 +99,7 @@ async def ingest_vitals(
       title: 'Dash Platform Core (:8000)',
       subtitle: 'Incident Lifecycle, Concurrency Control, WebSocket Topics',
       badge: 'Port :8000',
-      color: 'rose',
+      color: 'red',
       metrics: 'PostgreSQL OCC Guard',
       invariants: [
         'Database-level unique index blocks concurrent active emergencies',
@@ -119,7 +118,7 @@ WHERE status NOT IN ('RESOLVED', 'CANCELLED', 'FALSE_ALARM');`
       title: 'Multi-Tier Dispatch',
       subtitle: 'Ambulance 108/112, Hospital Trauma Pre-Alert, Volunteer Roster',
       badge: 'Multi-Tier',
-      color: 'emerald',
+      color: 'green',
       metrics: 'Zero Lost Dispatches',
       invariants: [
         'Deterministic 10-second grace window with wearer cancellation',
@@ -128,11 +127,8 @@ WHERE status NOT IN ('RESOLVED', 'CANCELLED', 'FALSE_ALARM');`
       ],
       failureMitigation: 'Unacknowledged dispatches auto-escalate to Tier-3 volunteers.',
       codeSnippet: `async def dispatch_incident(incident: Incident):
-    # Tier 1: Emergency Helplines
     await telephony.dial_helpline(incident.lat, incident.lon)
-    # Tier 2: Nearest Hospital Trauma Pre-Alert
     await hospital_client.pre_alert(incident.id, incident.medical_profile)
-    # Tier 3: Push Notification Mesh
     await responder_broker.notify_nearby(radius_km=3.0)`
     }
   ];
@@ -144,8 +140,8 @@ WHERE status NOT IN ('RESOLVED', 'CANCELLED', 'FALSE_ALARM');`
       category: 'Baseline',
       title: 'IDLE (Quiescent)',
       subtitle: 'Continuous vitals heartbeat within Gaussian confidence interval',
-      badge: 'State: 00',
-      color: 'cyan',
+      badge: 'State 00',
+      color: 'blue',
       metrics: 'Baseline Active',
       invariants: ['Zero database locks held', 'Rolling window accumulates samples'],
       failureMitigation: 'Stale packets discarded based on monotonic sequence number.',
@@ -157,7 +153,7 @@ assert active_incident_lock(user_id) is None`
       category: 'Threshold Breached',
       title: 'TRIGGERED (Anomaly)',
       subtitle: '4.2G deceleration or sustained heart rate spike detected',
-      badge: 'State: 01',
+      badge: 'State 01',
       color: 'amber',
       metrics: 'Anomaly Validated',
       invariants: ['Hardware telemetry cross-referenced across 2 distinct sensors'],
@@ -173,30 +169,25 @@ assert active_incident_lock(user_id) is None`
       category: 'Grace Interlock',
       title: 'VERIFYING (10s Grace)',
       subtitle: 'Wearer screen flashes loud siren; 10s countdown to cancel',
-      badge: 'State: 02',
-      color: 'indigo',
+      badge: 'State 02',
+      color: 'brand',
       metrics: '10s Countdown',
       invariants: [
         'Postgres partial index lock acquired at this point',
         'Wearer can abort false alarm with "I\'m OK" tap'
       ],
       failureMitigation: 'Network loss defaults to fail-safe dispatch on timeout.',
-      codeSnippet: `await transition_to(
-    IncidentState.VERIFYING, 
-    grace_seconds=10
-)
-# If wearer taps "I'm OK":
-#   -> CANCELLED (Terminal, lock released)
-# If timer expires:
-#   -> DISPATCHED`
+      codeSnippet: `await transition_to(IncidentState.VERIFYING, grace_seconds=10)
+# Wearer tap: -> CANCELLED (Terminal, lock released)
+# Timer expiry: -> DISPATCHED`
     },
     {
       id: 's_dispatched',
       category: 'Tier-1 Response',
       title: 'DISPATCHED (Active)',
       subtitle: 'Grace timer expired; Tier-1 ambulance and trauma pre-alert rolling',
-      badge: 'State: 03',
-      color: 'rose',
+      badge: 'State 03',
+      color: 'red',
       metrics: 'Lock Enforced',
       invariants: [
         'Dispatches immutable payload with GPS coordinates and medical history',
@@ -212,8 +203,8 @@ await append_incident_log(actor="SYSTEM", to_state="DISPATCHED")`
       category: 'Clinical Transit',
       title: 'TRANSPORTING / ON_SCENE',
       subtitle: 'Clinicians arrived on scene; patient transit underway',
-      badge: 'State: 04',
-      color: 'purple',
+      badge: 'State 04',
+      color: 'brand',
       metrics: 'Live GPS Sync',
       invariants: [
         'Responders sign telemetry stream via mobile app',
@@ -228,8 +219,8 @@ await socket_manager.broadcast_hospital_telemetry(incident.id)`
       category: 'Terminal State',
       title: 'RESOLVED (Sealed)',
       subtitle: 'Patient admitted to emergency room; incident audit record immutable',
-      badge: 'State: 05',
-      color: 'emerald',
+      badge: 'State 05',
+      color: 'green',
       metrics: 'Lock Released',
       invariants: [
         'Concurrency lock released in PostgreSQL',
@@ -237,8 +228,8 @@ await socket_manager.broadcast_hospital_telemetry(incident.id)`
       ],
       failureMitigation: 'Re-opening resolved incident prohibited; new incident required.',
       codeSnippet: `await transition_to(IncidentState.RESOLVED)
-# Partial index filter: WHERE status NOT IN ('RESOLVED', ...)
-# Lock automatically freed for subsequent emergencies.`
+# WHERE status NOT IN ('RESOLVED', ...)
+# Lock freed automatically for subsequent emergencies.`
     }
   ];
 
@@ -250,7 +241,7 @@ await socket_manager.broadcast_hospital_telemetry(incident.id)`
       title: 'Voice & Vitals Stream',
       subtitle: 'User voice query or wearable biometric trigger entering agent pipeline',
       badge: 'Input Node',
-      color: 'cyan',
+      color: 'blue',
       metrics: 'Audio / Text / Vitals',
       invariants: ['Sanitization of PII / raw patient identifiers', 'Monotonic request ID'],
       failureMitigation: 'Muffled audio falls back to structured SMS questionnaire.',
@@ -266,7 +257,7 @@ await socket_manager.broadcast_hospital_telemetry(incident.id)`
       title: 'Deterministic Red-Flag Gate',
       subtitle: 'Hardcoded keyword & vital bounds bypassing LLM for acute emergencies',
       badge: 'Bypass Gate',
-      color: 'rose',
+      color: 'red',
       metrics: '<2ms Zero-LLM Fast-Path',
       invariants: [
         'Zero LLM dependency for acute life-threat keywords (e.g. "chest crushing pain")',
@@ -285,7 +276,7 @@ await socket_manager.broadcast_hospital_telemetry(incident.id)`
       title: 'Hybrid Medical Retrieval',
       subtitle: 'BM25 clinical guideline tokens + pgvector dense cosine embeddings',
       badge: 'Hybrid RAG',
-      color: 'indigo',
+      color: 'brand',
       metrics: 'Min Cosine Sim: 0.82',
       invariants: [
         'Only verified clinical guidelines (WHO / ICMR protocols) ingested',
@@ -303,7 +294,7 @@ await socket_manager.broadcast_hospital_telemetry(incident.id)`
       title: 'Clinical Tool-Calling Node',
       subtitle: 'Drug-drug interactions, pediatric weight checks, allergy interlocks',
       badge: 'Tool Loop',
-      color: 'purple',
+      color: 'amber',
       metrics: '18 Drug Classes',
       invariants: [
         'Strict schema validation using Pydantic on tool inputs and outputs',
@@ -312,7 +303,6 @@ await socket_manager.broadcast_hospital_telemetry(incident.id)`
       failureMitigation: 'Tool timeouts gracefully degrade with warning banner.',
       codeSnippet: `@tool
 def check_drug_interaction(drug_a: str, drug_b: str) -> InteractionResult:
-    """Verifies potential adverse reactions between pharmacological substances."""
     return drug_interaction_matrix.lookup(drug_a, drug_b)`
     },
     {
@@ -331,9 +321,7 @@ def check_drug_interaction(drug_a: str, drug_b: str) -> InteractionResult:
       codeSnippet: `def regulatory_guardrail(state: AgentState) -> AgentState:
     response = state["messages"][-1].content
     if contains_unverified_rx(response):
-        state["messages"][-1] = AIMessage(
-            content=REFUSAL_DISCLAIMER_TEMPLATE
-        )
+        state["messages"][-1] = AIMessage(content=REFUSAL_DISCLAIMER_TEMPLATE)
     return state`
     },
     {
@@ -342,7 +330,7 @@ def check_drug_interaction(drug_a: str, drug_b: str) -> InteractionResult:
       title: 'Localized Voice Synthesis & Trace',
       subtitle: 'Bilingual Hindi/English output + full LangSmith trace commit',
       badge: 'Audit & TTS',
-      color: 'emerald',
+      color: 'green',
       metrics: 'LangSmith Traced',
       invariants: [
         'Full JSON audit log with token count, tool outputs, and user metadata',
@@ -364,57 +352,44 @@ def check_drug_interaction(drug_a: str, drug_b: str) -> InteractionResult:
 
   const [selectedNode, setSelectedNode] = useState<FlowNode>(nodes[0]);
 
-  // Color mapping utilities
-  const getColorStyles = (color: string) => {
+  // Clean DashResQ Tone Styles
+  const getTone = (color: string) => {
     switch (color) {
-      case 'cyan':
+      case 'brand':
         return {
-          border: 'border-cyan-500/40',
-          bg: 'bg-cyan-500/10',
-          text: 'text-cyan-400',
-          ring: 'ring-cyan-500/30',
-          dot: 'bg-cyan-400'
+          border: 'border-[#3C46D1]',
+          bg: 'bg-[#3C46D1]/10',
+          text: 'text-indigo-300',
+          dot: 'bg-[#3C46D1]'
         };
-      case 'indigo':
+      case 'red':
         return {
-          border: 'border-indigo-500/40',
-          bg: 'bg-indigo-500/10',
-          text: 'text-indigo-400',
-          ring: 'ring-indigo-500/30',
-          dot: 'bg-indigo-400'
+          border: 'border-[#EF4444]',
+          bg: 'bg-[#EF4444]/10',
+          text: 'text-[#F87171]',
+          dot: 'bg-[#EF4444]'
+        };
+      case 'green':
+        return {
+          border: 'border-[#10B981]',
+          bg: 'bg-[#10B981]/10',
+          text: 'text-[#10B981]',
+          dot: 'bg-[#10B981]'
         };
       case 'amber':
         return {
-          border: 'border-amber-500/40',
-          bg: 'bg-amber-500/10',
-          text: 'text-amber-400',
-          ring: 'ring-amber-500/30',
-          dot: 'bg-amber-400'
+          border: 'border-[#F59E0B]',
+          bg: 'bg-[#F59E0B]/10',
+          text: 'text-[#F59E0B]',
+          dot: 'bg-[#F59E0B]'
         };
-      case 'rose':
-        return {
-          border: 'border-rose-500/40',
-          bg: 'bg-rose-500/10',
-          text: 'text-rose-400',
-          ring: 'ring-rose-500/30',
-          dot: 'bg-rose-400'
-        };
-      case 'purple':
-        return {
-          border: 'border-purple-500/40',
-          bg: 'bg-purple-500/10',
-          text: 'text-purple-400',
-          ring: 'ring-purple-500/30',
-          dot: 'bg-purple-400'
-        };
-      case 'emerald':
+      case 'blue':
       default:
         return {
-          border: 'border-emerald-500/40',
-          bg: 'bg-emerald-500/10',
-          text: 'text-emerald-400',
-          ring: 'ring-emerald-500/30',
-          dot: 'bg-emerald-400'
+          border: 'border-[#1D4ED8]',
+          bg: 'bg-[#1D4ED8]/10',
+          text: 'text-[#60A5FA]',
+          dot: 'bg-[#1D4ED8]'
         };
     }
   };
@@ -422,88 +397,85 @@ def check_drug_interaction(drug_a: str, drug_b: str) -> InteractionResult:
   return (
     <div className="space-y-6">
       
-      {/* ── FLOW DESIGN CANVAS ── */}
-      <div className="rounded-2xl bg-[#07090F] border border-slate-800 p-5 sm:p-7 relative overflow-hidden shadow-2xl">
+      {/* ── CLEAN DASHRESQ FLOW CANVAS ── */}
+      <div className="rounded-2xl bg-[#151B28] border border-[rgba(148,163,184,0.18)] p-5 sm:p-7 relative shadow-xl">
         
-        {/* Ambient grid background */}
-        <div className="absolute inset-0 bg-grid-pattern opacity-40 pointer-events-none" />
-
         {/* Canvas Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-5 mb-6 border-b border-slate-800/80 gap-3 relative z-10">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 mb-6 border-b border-[rgba(148,163,184,0.14)] gap-3">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-lg bg-indigo-500/10 border border-indigo-500/30 text-indigo-400">
+            <div className="w-8 h-8 rounded-lg bg-[#07090F] border border-[rgba(148,163,184,0.18)] flex items-center justify-center text-[#3C46D1]">
               <Workflow className="w-4 h-4" />
             </div>
             <div>
-              <h4 className="font-mono text-xs font-bold text-white uppercase tracking-wider">
+              <h4 className="font-mono text-xs font-bold text-[#F1F4FA] uppercase tracking-wider">
                 {type === 'topology' && 'Dual-Service Ingestion & Security Topology Flow'}
                 {type === 'statemachine' && '9-State Concurrency State Machine Flow'}
                 {type === 'langgraph' && 'Autonomous Multi-Agent Triage Execution Pipeline'}
               </h4>
-              <p className="text-[11px] font-mono text-slate-400">
-                Click any step to inspect code invariants, concurrency locks, and failure modes.
+              <p className="text-[11px] font-mono text-[#8692A6]">
+                Click any stage card to inspect failure mitigations and verified production code.
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 text-[11px] font-mono text-slate-400">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-            <span className="text-emerald-400 font-semibold">STREAM FLOW ACTIVE</span>
+          <div className="flex items-center gap-2 text-[11px] font-mono text-[#8692A6]">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#10B981]" />
+            <span className="text-[#10B981] font-semibold">STREAM FLOW ACTIVE</span>
             <span className="text-slate-600">|</span>
             <span>{nodes.length} STAGES</span>
           </div>
         </div>
 
         {/* ── HORIZONTAL FLOW SEQUENCE ── */}
-        <div className="relative z-10 flex flex-col lg:flex-row items-stretch justify-between gap-3 overflow-x-auto pb-3 pt-2">
+        <div className="flex flex-col lg:flex-row items-stretch justify-between gap-2.5 overflow-x-auto pb-2">
           {nodes.map((node, index) => {
             const isSelected = selectedNode.id === node.id;
-            const cStyles = getColorStyles(node.color);
+            const tone = getTone(node.color);
 
             return (
               <div key={node.id} className="flex-1 flex flex-col lg:flex-row items-center gap-2">
                 {/* Node Card */}
                 <div
                   onClick={() => setSelectedNode(node)}
-                  className={`w-full p-4 rounded-xl cursor-pointer transition-all duration-200 border relative group text-left ${
+                  className={`w-full p-4 rounded-xl cursor-pointer transition-all duration-200 border text-left ${
                     isSelected
-                      ? `bg-slate-900/90 ${cStyles.border} shadow-lg ring-2 ${cStyles.ring} translate-y-[-2px]`
-                      : 'bg-slate-950/70 border-slate-800/80 hover:border-slate-700 hover:bg-slate-900/50'
+                      ? `bg-[#07090F] ${tone.border} shadow-md translate-y-[-2px]`
+                      : 'bg-[#0E1320] border-[rgba(148,163,184,0.14)] hover:border-slate-500'
                   }`}
                 >
                   {/* Step Category & Badge */}
                   <div className="flex items-center justify-between gap-1 mb-2">
-                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">
+                    <span className="text-[9.5px] font-mono font-bold uppercase tracking-wider text-[#8692A6]">
                       {node.category}
                     </span>
-                    <span className={`text-[9px] font-mono px-1.5 py-0.5 rounded border ${cStyles.bg} ${cStyles.text} ${cStyles.border}`}>
+                    <span className={`text-[9px] font-mono px-1.5 py-0.5 rounded border border-[rgba(148,163,184,0.18)] bg-[#07090F] ${tone.text}`}>
                       {node.badge}
                     </span>
                   </div>
 
                   {/* Title */}
-                  <h5 className="text-sm font-bold text-white tracking-tight flex items-center gap-1.5">
-                    <span className={`w-1.5 h-1.5 rounded-full ${cStyles.dot} flex-shrink-0`} />
+                  <h5 className="text-sm font-bold text-[#F1F4FA] tracking-tight flex items-center gap-1.5">
+                    <span className={`w-1.5 h-1.5 rounded-full ${tone.dot} flex-shrink-0`} />
                     <span className="truncate">{node.title}</span>
                   </h5>
 
                   {/* Subtitle */}
-                  <p className="mt-1 text-[11px] text-slate-400 line-clamp-2 leading-relaxed">
+                  <p className="mt-1 text-[11px] text-[#8692A6] line-clamp-2 leading-relaxed">
                     {node.subtitle}
                   </p>
 
                   {/* Metric Ribbon */}
-                  <div className="mt-3 pt-2 border-t border-slate-800/60 flex items-center justify-between text-[10px] font-mono text-slate-400">
-                    <span className="text-slate-500">Benchmark:</span>
-                    <span className={`font-semibold ${cStyles.text}`}>{node.metrics}</span>
+                  <div className="mt-3 pt-2 border-t border-[rgba(148,163,184,0.12)] flex items-center justify-between text-[10px] font-mono text-[#8692A6]">
+                    <span>Benchmark:</span>
+                    <span className={`font-semibold ${tone.text}`}>{node.metrics}</span>
                   </div>
                 </div>
 
                 {/* Connecting Arrow (between nodes) */}
                 {index < nodes.length - 1 && (
-                  <div className="flex items-center justify-center py-1 lg:py-0 lg:px-1 text-slate-600 group-hover:text-indigo-400 transition-colors">
-                    <div className="lg:hidden text-indigo-400 font-mono text-xs">↓</div>
-                    <ArrowRight className="hidden lg:block w-4 h-4 text-indigo-400/80 animate-pulse" />
+                  <div className="flex items-center justify-center py-1 lg:py-0 lg:px-1 text-slate-500">
+                    <div className="lg:hidden text-[#8692A6] font-mono text-xs">↓</div>
+                    <ArrowRight className="hidden lg:block w-3.5 h-3.5 text-slate-500" />
                   </div>
                 )}
               </div>
@@ -512,32 +484,32 @@ def check_drug_interaction(drug_a: str, drug_b: str) -> InteractionResult:
         </div>
 
         {/* ── DETAIL INSPECTION DRAWER ── */}
-        <div className="mt-6 pt-5 border-t border-slate-800/80 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        <div className="mt-6 pt-5 border-t border-[rgba(148,163,184,0.14)] grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           
           {/* Left: Invariants & Failure Mitigation */}
-          <div className="lg:col-span-6 space-y-4">
+          <div className="lg:col-span-6 space-y-3.5">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-indigo-400" />
-                <span className="text-xs font-mono font-bold uppercase tracking-wider text-white">
+                <ShieldCheck className="w-4 h-4 text-[#3C46D1]" />
+                <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#F1F4FA]">
                   Stage Invariants: {selectedNode.title}
                 </span>
               </div>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300">
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#07090F] text-[#8692A6] border border-[rgba(148,163,184,0.18)]">
                 {selectedNode.category}
               </span>
             </div>
 
             <div className="space-y-2">
               {selectedNode.invariants.map((inv, idx) => (
-                <div key={idx} className="flex items-start gap-2.5 text-xs text-slate-300 leading-relaxed bg-black/40 p-2.5 rounded-lg border border-slate-800/80">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 mt-0.5 flex-shrink-0" />
+                <div key={idx} className="flex items-start gap-2.5 text-xs text-[#F1F4FA] leading-relaxed bg-[#07090F] p-3 rounded-xl border border-[rgba(148,163,184,0.14)]">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-[#10B981] mt-0.5 flex-shrink-0" />
                   <span>{inv}</span>
                 </div>
               ))}
             </div>
 
-            <div className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/20 text-xs font-mono text-amber-200 leading-relaxed">
+            <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs font-mono text-amber-200 leading-relaxed">
               <div className="flex items-center gap-1.5 font-bold text-amber-400 mb-1">
                 <AlertTriangle className="w-3.5 h-3.5" />
                 <span>FAILURE MODE DEFENSE:</span>
@@ -551,16 +523,16 @@ def check_drug_interaction(drug_a: str, drug_b: str) -> InteractionResult:
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
                 <FileCode2 className="w-4 h-4 text-sky-400" />
-                <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-300">
+                <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#8692A6]">
                   Verified Implementation Logic
                 </span>
               </div>
-              <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+              <span className="text-[10px] font-mono text-[#10B981] bg-[#10B981]/10 px-2 py-0.5 rounded border border-[#10B981]/20">
                 AUDITED
               </span>
             </div>
 
-            <div className="rounded-xl bg-black/80 border border-slate-800 p-4 font-mono text-[11.5px] text-slate-300 overflow-x-auto leading-relaxed shadow-inner">
+            <div className="rounded-xl bg-[#07090F] border border-[rgba(148,163,184,0.18)] p-4 font-mono text-[11px] text-[#F1F4FA] overflow-x-auto leading-relaxed">
               <pre>{selectedNode.codeSnippet}</pre>
             </div>
           </div>
