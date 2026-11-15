@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { Cpu, GitBranch, ArrowRight, FileText } from 'lucide-react';
+import { Cpu, Radio, ArrowRight, FileText } from 'lucide-react';
 import { PERSONAL_INFO, CORE_METRICS } from '../data/portfolio-data';
 import { GithubIcon, LinkedinIcon } from './Icons';
 
@@ -52,20 +52,20 @@ export const Hero: FC<HeroProps> = ({ onOpenResume }) => {
           {/* Primary Action Buttons */}
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <a
-              href="#architecture"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-sm font-semibold text-white transition-all shadow-lg shadow-indigo-600/25"
+              href="#projects"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-sm font-semibold text-white transition-all shadow-lg shadow-indigo-600/25 cursor-pointer"
             >
-              <Cpu className="w-4 h-4" />
-              <span>Inspect Architecture</span>
+              <Radio className="w-4 h-4 text-emerald-300 animate-pulse" />
+              <span>Launch Systems Radar (8)</span>
               <ArrowRight className="w-4 h-4 ml-1" />
             </a>
 
             <a
-              href="#projects"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-slate-700 bg-slate-900/80 hover:bg-slate-800 text-sm font-semibold text-slate-200 transition-all"
+              href="#architecture"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-slate-700 bg-slate-900/80 hover:bg-slate-800 text-sm font-semibold text-slate-200 transition-all cursor-pointer"
             >
-              <GitBranch className="w-4 h-4 text-indigo-400" />
-              <span>Project Catalog (6)</span>
+              <Cpu className="w-4 h-4 text-indigo-400" />
+              <span>Inspect Architecture</span>
             </a>
 
             <button

@@ -29,11 +29,11 @@ export const Navbar: FC<NavbarProps> = ({ onOpenResume }) => {
 
         {/* Navigation links */}
         <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-slate-300">
-          <a href="#axioms" className="hover:text-indigo-400 transition-colors">Axioms</a>
+          <a href="#projects" className="hover:text-indigo-400 transition-colors">Systems Radar</a>
           <a href="#architecture" className="hover:text-indigo-400 transition-colors">Architecture</a>
-          <a href="#projects" className="hover:text-indigo-400 transition-colors">Projects</a>
           <a href="#experience" className="hover:text-indigo-400 transition-colors">Experience</a>
           <a href="#competitive" className="hover:text-indigo-400 transition-colors">DSA & Metrics</a>
+          <a href="#axioms" className="hover:text-indigo-400 transition-colors">Axioms</a>
           <a href="#skills" className="hover:text-indigo-400 transition-colors">Stack</a>
         </nav>
 

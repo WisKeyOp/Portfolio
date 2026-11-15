@@ -26,8 +26,8 @@
 .bg-grid-pattern {
   background-size: 32px 32px;
   background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
 }
 
 .glow-card {
@@ -42,6 +42,53 @@
   border-color: rgba(99, 102, 241, 0.45);
   box-shadow: 0 16px 36px -12px rgba(79, 70, 229, 0.2);
   transform: translateY(-2px);
+}
+
+/* Radar & Tactical Map Animations */
+@keyframes radarSweep {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes rescuePing {
+  0% {
+    transform: scale(1);
+    opacity: 0.65;
+  }
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+
+@keyframes rescueDash {
+  to {
+    stroke-dashoffset: -40;
+  }
+}
+
+@keyframes packetPulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 6px currentColor);
+  }
+  50% {
+    transform: scale(1.3);
+    filter: drop-shadow(0 0 16px currentColor);
+  }
+}
+
+@keyframes consoleBlink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
 }
 
 /* Custom scrollbar */

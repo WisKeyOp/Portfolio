@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
-import { AxiomsSection } from './components/AxiomsSection';
+import { TelemetryMissionControl } from './components/TelemetryMissionControl';
 import { ArchitectureDeepDive } from './components/ArchitectureDeepDive';
-import { ProjectsSection } from './components/ProjectsSection';
 import { ExperienceSection } from './components/ExperienceSection';
 import { CompetitiveSection } from './components/CompetitiveSection';
+import { AxiomsSection } from './components/AxiomsSection';
 import { SkillsMatrix } from './components/SkillsMatrix';
 import { Footer } from './components/Footer';
 import { ResumeModal } from './components/ResumeModal';
@@ -19,11 +19,11 @@ export function App() {
       
       <main className="flex-grow">
         <Hero onOpenResume={() => setIsResumeOpen(true)} />
-        <AxiomsSection />
+        <TelemetryMissionControl />
         <ArchitectureDeepDive />
-        <ProjectsSection />
         <ExperienceSection />
         <CompetitiveSection />
+        <AxiomsSection />
         <SkillsMatrix />
       </main>
 
