@@ -61,9 +61,9 @@ export const PERSONAL_INFO = {
   firstName: "Aayush",
   lastName: "Shukla",
   heroWord: "Systems Architect",
-  title: "Lead Systems Architect & AI Infrastructure Engineer",
+  title: "Generative AI Systems Engineer @ EY · Lead Systems Architect",
   tagline: "Building fault-tolerant distributed backends, LangGraph multi-agent systems, and safety-critical telemetry pipelines.",
-  role: "Lead Systems Architect & AI Infrastructure Engineer",
+  role: "Generative AI Systems Engineer",
   company: "Ernst & Young (EY)",
   location: "Lucknow, India (Working in Pune · Alum BIT Mesra, Ranchi)",
   baseLocation: "Lucknow, India",
@@ -80,7 +80,7 @@ export const PERSONAL_INFO = {
   cvUrl: "/Aayush_Shukla_Resume.pdf",
   portrait: "/portrait.png",
   portraitFallback: "/portrait-original.jpg",
-  bio: "Lead Systems Architect and Failure-Mode Analyst. Specialized in Optimistic Concurrency Control (OCC), high-throughput IoT telemetry ingestion, and enterprise LangGraph multi-agent systems. Associate Consultant in Generative AI & AI Infrastructure at EY; Founding Systems Architect behind DashResQ's 299-endpoint distributed ecosystem.",
+  bio: "Lead Systems Architect and Failure-Mode Analyst. Specialized in Optimistic Concurrency Control (OCC), high-throughput IoT telemetry ingestion, and enterprise LangGraph multi-agent systems. Generative AI Systems Engineer at EY; Founding Systems Architect behind DashResQ's 299-endpoint distributed ecosystem.",
   socials: [
     {
       short: "In",
@@ -116,7 +116,7 @@ export const CORE_METRICS = [
 
 export const aboutData = {
   intro:
-    "Hello! I'm Aayush Shukla. Lead Systems Architect & AI Infrastructure Engineer engineering high-integrity backends, multi-agent swarms, and safety-critical platforms.",
+    "Hello! I'm Aayush Shukla. Generative AI Systems Engineer at EY and Lead Systems Architect behind high-integrity backends, multi-agent swarms, and safety-critical platforms.",
   points: [
     "Optimistic Concurrency Control (OCC)",
     "High-Throughput Telemetry (600 vitals/min)",
@@ -209,7 +209,7 @@ export const SYSTEM_AXIOMS = [
 export const EXPERIENCES: Experience[] = [
   {
     company: "Ernst & Young (EY)",
-    role: "Associate Consultant, Generative AI & AI Infrastructure",
+    role: "Generative AI Systems Engineer",
     location: "Pune, India",
     place: "Pune, India",
     timeline: "Aug 2026 – Present",

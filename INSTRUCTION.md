@@ -37,7 +37,7 @@ The Portfolio application is a high-performance, statically compiled showcase en
 - **Proportional Dot Scale Architecture**:
   The map is a cybernetic distributed systems topology radar representing Projects, Work Experience, and Achievements where dot diameter is strictly proportional to system scale, user throughput, and architectural impact:
   - **Apex Flagship (DashResQ)**: Weight 5.0, 32px core beacon, 3 expanding sonar pulse waves (`drq-ping`), red glow (`#EF4444`). 2,584 CI tests, 299 endpoints, 600 vitals/min.
-  - **Major Work Experience (EY GenAI Infrastructure)**: Weight 4.5, 26px beacon, 2 pulse waves, cyan glow (`#38BDF8`). Associate Consultant, -30% RAG prompt overhead, Azure APIM gateway.
+  - **Major Work Experience (EY GenAI Infrastructure)**: Weight 4.5, 26px beacon, 2 pulse waves, cyan glow (`#38BDF8`). Generative AI Systems Engineer, -30% RAG prompt overhead, Azure APIM gateway.
   - **Competitive DSA Milestones (Algorithmic Rigor)**: Weight 4.0, 22px beacon, 2 pulse waves, amber glow (`#F59E0B`). LeetCode Knight 1899 (Top 4.67%), Codeforces Expert 1649, Adobe Semifinalist.
   - **Temporal Ledgers & Clinical AI (PCAP, BITAID)**: Weight 4.0, 22px beacons, 2 pulse waves. Append-only OCC ledger and 18-class drug interaction consultation.
   - **Production Ecosystem Modules (MediConnect, Knowledge-Bridge, RapAid, Veda AI)**: Weight 3.0 - 3.5, 14px - 18px beacons.

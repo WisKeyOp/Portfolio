@@ -82,7 +82,7 @@ export const TELEMETRY_NODES: TelemetryNode[] = [
     color: "var(--lime)",
     glowColor: "rgba(203, 255, 58, 0.25)",
     tag: "WORK EX // EY",
-    metricBadge: "Associate Consultant · -30% RAG Prompt Overhead",
+    metricBadge: "Generative AI Systems Engineer · -30% RAG Prompt Overhead",
     locationHub: "Pune, India (Ernst & Young)",
     portLabel: "Azure APIM / MCP",
     vitalSnippet: {
@@ -92,7 +92,7 @@ export const TELEMETRY_NODES: TelemetryNode[] = [
       tone: "lime",
     },
     details: {
-      role: "Associate Consultant (Generative AI & AI Infrastructure)",
+      role: "Generative AI Systems Engineer",
       timeline: "Jan 2026 – Present",
       stack: ["LangGraph", "LangChain", "MCP Protocol", "Azure APIM", "OAuth 2.0/OIDC", "Python", "RAG", "pgvector"],
       keyGuarantees: [
