@@ -2,22 +2,20 @@ import type { FC } from 'react';
 import { PERSONAL_INFO } from '../data/portfolio-data';
 
 const navLinks = [
-  { href: "#about", label: "01 // About & Invariants" },
-  { href: "#services", label: "02 // Core Domains" },
-  { href: "#work", label: "03 // Selected Systems" },
-  { href: "#axioms", label: "04 // Failure Axioms" },
-  { href: "#experience", label: "05 // Production History" },
+  { href: "#about", label: "01 // About" },
+  { href: "#services", label: "02 // Engineering Domains" },
+  { href: "#work", label: "03 // Selected Projects" },
+  { href: "#axioms", label: "04 // Engineering Principles" },
+  { href: "#experience", label: "05 // Work Experience" },
   { href: "#stack", label: "06 // Technologies" },
-  // { href: "#radar", label: "07 // Telemetry Radar" },
-  // { href: "#architecture", label: "08 // Architecture Deep Dive" },
-  { href: "#contact", label: "07 // Direct Dispatch" },
+  { href: "#contact", label: "07 // Contact" },
 ];
 
 const contactDetails = [
   { icon: "✉", text: PERSONAL_INFO.email, href: `mailto:${PERSONAL_INFO.email}` },
   { icon: "☎", text: PERSONAL_INFO.phone, href: `tel:${PERSONAL_INFO.phone.replace(/[^0-9+]/g, "")}` },
   { icon: "📍", text: PERSONAL_INFO.location },
-  { icon: "⚡", text: "Production Active · Systems Architect" },
+  { icon: "⚡", text: "Generative AI Systems Engineer @ EY" },
 ];
 
 export const Offcanvas: FC = () => {

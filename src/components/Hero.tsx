@@ -43,19 +43,6 @@ export const Hero: FC<HeroProps> = ({ onOpenResume }) => {
         />
       </figure>
 
-      {/* Floating Status Pill */}
-      <div
-        className="absolute top-28 left-1/2 -translate-x-1/2 z-10 px-4 py-1.5 rounded-full border border-white/10 bg-[var(--card)]/80 backdrop-blur-md text-[11px] font-mono uppercase tracking-wider text-[var(--slate)] shadow-sm flex items-center gap-2.5 pointer-events-auto"
-        data-fade
-      >
-        <span className="w-2 h-2 rounded-full bg-[var(--lime)] animate-ping" />
-        <span className="text-[var(--ink)] font-semibold">Production Runtime</span>
-        <span className="opacity-30">|</span>
-        <span className="hidden sm:inline">600 Vitals/Min Telemetry</span>
-        <span className="hidden sm:inline opacity-30">|</span>
-        <span className="text-[var(--flame)] font-semibold">OCC State Machine</span>
-      </div>
-
       {/* Quick Navigation Anchor Bar */}
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-3 pointer-events-auto">
         <a
@@ -63,7 +50,7 @@ export const Hero: FC<HeroProps> = ({ onOpenResume }) => {
           className="btn-primary text-xs !py-2.5 !px-5"
           data-ripple
         >
-          Explore Systems <i>↓</i>
+          Selected Projects <i>↓</i>
         </a>
         {onOpenResume && (
           <button

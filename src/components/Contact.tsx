@@ -25,11 +25,11 @@ export const Contact: FC = () => {
     }
 
     setSubmitting(true);
-    setStatus('Dispatching transmission...');
+    setStatus('Sending message...');
 
     // Mailto fallback or local acknowledgement for static portfolio builds
     setTimeout(() => {
-      setStatus("Transmission recorded. Redirecting to your mail client...");
+      setStatus("Message recorded. Redirecting to your mail client...");
       window.location.href = `mailto:${PERSONAL_INFO.email}?subject=${encodeURIComponent(
         `[Systems Architecture Inquiry] from ${name}`
       )}&body=${encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${message}`)}`;
@@ -113,7 +113,7 @@ export const Contact: FC = () => {
           </div>
 
           <div className="field">
-            <label htmlFor="cf-message">Message / System Inquiry</label>
+            <label htmlFor="cf-message">Message</label>
             <textarea id="cf-message" name="message" rows={5} required />
           </div>
 
@@ -123,7 +123,7 @@ export const Contact: FC = () => {
             disabled={submitting}
             data-ripple
           >
-            {submitting ? 'Dispatching...' : 'Dispatch Message'}
+            {submitting ? 'Sending...' : 'Send Message'}
           </button>
 
           <p className="form-note" id="formNote" role="status">

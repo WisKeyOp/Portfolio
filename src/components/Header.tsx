@@ -39,27 +39,7 @@ export const Header: FC<HeaderProps> = ({ onOpenResume, onOpenCommandMenu }) => 
             <i />
           </span>
           <b>{PERSONAL_INFO.firstName}</b>
-          <span className="hidden sm:inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-[var(--lime)]/10 text-[var(--lime)] border border-[var(--lime)]/20">
-            <span className="w-1.5 h-1.5 rounded-full bg-[var(--lime)]" />
-            SYS_ARCH
-          </span>
         </a>
-
-        {/* Floating Center Dock: Shadcn Minimalist Navigation */}
-        <nav className="hidden lg:flex items-center gap-1 px-3 py-1.5 rounded-full bg-white/[0.04] dark:bg-black/40 border border-black/10 dark:border-white/10 backdrop-blur-md text-xs font-mono">
-          <a href="#work" className="px-3 py-1 rounded-full text-[var(--slate)] hover:text-[var(--ink)] hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
-            Systems
-          </a>
-          <a href="#axioms" className="px-3 py-1 rounded-full text-[var(--slate)] hover:text-[var(--ink)] hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
-            Invariants
-          </a>
-          <a href="#experience" className="px-3 py-1 rounded-full text-[var(--slate)] hover:text-[var(--ink)] hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
-            Timeline
-          </a>
-          <a href="#contact" className="px-3 py-1 rounded-full text-[var(--slate)] hover:text-[var(--ink)] hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
-            Transmission
-          </a>
-        </nav>
 
         {/* Social Icons */}
         <div className="socials hidden md:flex">

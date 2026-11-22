@@ -12,7 +12,7 @@ export const Works: FC<WorksProps> = ({ onSelectProject }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
 
   const categories = [
-    { id: 'ALL', label: 'All Architectures' },
+    { id: 'ALL', label: 'All Projects' },
     { id: 'Safety-Critical & IoT', label: 'Safety-Critical & IoT' },
     { id: 'AI & LangGraph', label: 'AI & LangGraph' },
     { id: 'Full-Stack & Systems', label: 'Ledgers & Systems' },
@@ -28,7 +28,7 @@ export const Works: FC<WorksProps> = ({ onSelectProject }) => {
       {/* Sticky Wordmark & Stage */}
       <div className="works__stage">
         <div className="works__bg" aria-hidden="true">
-          <h2 className="works__word">Systems</h2>
+          <h2 className="works__word">Projects</h2>
         </div>
 
         <span className="sr-only">Selected Architectural Systems</span>
