@@ -20,6 +20,8 @@ interface LogEntry {
   details: string;
 }
 
+const INITIAL_TIMESTAMP = '18:42:01';
+
 export const ArchitectureDeepDive: FC = () => {
   const [activeTab, setActiveTab] = useState<'topology' | 'statemachine' | 'langgraph' | 'simulator'>('topology');
 
@@ -27,7 +29,7 @@ export const ArchitectureDeepDive: FC = () => {
   const [simState, setSimState] = useState<IncidentState>('IDLE');
   const [simLogs, setSimLogs] = useState<LogEntry[]>([
     {
-      timestamp: new Date().toISOString().substring(11, 19),
+      timestamp: INITIAL_TIMESTAMP,
       level: 'INFO',
       event: 'SYSTEM_BOOT',
       details: 'OCC state machine initialized. PostgreSQL partial unique index enforced.',
@@ -114,32 +116,32 @@ export const ArchitectureDeepDive: FC = () => {
   };
 
   return (
-    <section id="architecture" className="py-20 border-b border-white/5 bg-[#07090F]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="architecture" className="dark py-20 border-t border-b border-[var(--line-dark)] bg-[var(--void)] text-white">
+      <div className="shell">
         
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#151B28] border border-[rgba(148,163,184,0.18)] text-xs font-mono text-[#F1F4FA]">
-              <Cpu className="w-3.5 h-3.5 text-[#3C46D1]" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--coal)] border border-[var(--line-dark)] text-xs font-mono text-[var(--smoke)]">
+              <Cpu className="w-3.5 h-3.5 text-[var(--flame)]" />
               <span className="font-bold">SYSTEM DESIGN & FORMAL ARCHITECTURE</span>
             </div>
-            <h2 className="mt-3 text-3xl sm:text-4xl font-extrabold text-[#F1F4FA] tracking-tight">
+            <h2 className="mt-3 text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
               DashResQ Distributed Architecture
             </h2>
-            <p className="mt-1 text-sm text-[#8692A6] max-w-2xl">
+            <p className="mt-1 text-sm text-[var(--slate)] max-w-2xl font-sans leading-relaxed">
               Engineered to resolve life-critical race conditions: sensor jitter and cellular retry storms must never trigger double dispatches or dropped alerts.
             </p>
           </div>
 
-          {/* Architecture tabs (Clean DashResQ Styling) */}
-          <div className="flex flex-wrap items-center p-1 rounded-xl bg-[#151B28] border border-[rgba(148,163,184,0.18)] gap-1">
+          {/* Architecture tabs (Restrained Swiss Styling) */}
+          <div className="flex flex-wrap items-center p-1 rounded-xl bg-[var(--coal)] border border-[var(--line-dark)] gap-1">
             <button
               onClick={() => setActiveTab('topology')}
               className={`px-3 py-1.5 rounded-lg text-xs font-mono font-medium transition-all cursor-pointer ${
                 activeTab === 'topology'
-                  ? 'bg-[#3C46D1] text-white shadow-sm'
-                  : 'text-[#8692A6] hover:text-[#F1F4FA]'
+                  ? 'bg-[var(--flame)] text-white shadow-sm font-semibold'
+                  : 'text-[var(--smoke)] hover:text-white'
               }`}
             >
               1. Ingestion Topology
@@ -148,8 +150,8 @@ export const ArchitectureDeepDive: FC = () => {
               onClick={() => setActiveTab('statemachine')}
               className={`px-3 py-1.5 rounded-lg text-xs font-mono font-medium transition-all cursor-pointer ${
                 activeTab === 'statemachine'
-                  ? 'bg-[#3C46D1] text-white shadow-sm'
-                  : 'text-[#8692A6] hover:text-[#F1F4FA]'
+                  ? 'bg-[var(--flame)] text-white shadow-sm font-semibold'
+                  : 'text-[var(--smoke)] hover:text-white'
               }`}
             >
               2. 9-State OCC Machine
@@ -158,8 +160,8 @@ export const ArchitectureDeepDive: FC = () => {
               onClick={() => setActiveTab('langgraph')}
               className={`px-3 py-1.5 rounded-lg text-xs font-mono font-medium transition-all cursor-pointer ${
                 activeTab === 'langgraph'
-                  ? 'bg-[#3C46D1] text-white shadow-sm'
-                  : 'text-[#8692A6] hover:text-[#F1F4FA]'
+                  ? 'bg-[var(--flame)] text-white shadow-sm font-semibold'
+                  : 'text-[var(--smoke)] hover:text-white'
               }`}
             >
               3. LangGraph Triage Flow
@@ -168,8 +170,8 @@ export const ArchitectureDeepDive: FC = () => {
               onClick={() => setActiveTab('simulator')}
               className={`px-3 py-1.5 rounded-lg text-xs font-mono font-medium transition-all cursor-pointer flex items-center gap-1.5 ${
                 activeTab === 'simulator'
-                  ? 'bg-[#10B981] text-white shadow-sm'
-                  : 'text-[#10B981] hover:text-emerald-300'
+                  ? 'bg-[var(--lime)] text-[var(--on-lime,#000)] shadow-sm font-bold'
+                  : 'text-[var(--lime)] hover:text-white'
               }`}
             >
               <Play className="w-3 h-3" />
@@ -195,13 +197,13 @@ export const ArchitectureDeepDive: FC = () => {
 
         {/* Tab 4: Live OCC Simulator */}
         {activeTab === 'simulator' && (
-          <div className="p-6 sm:p-8 rounded-2xl bg-[#151B28] border border-[rgba(148,163,184,0.18)]">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[rgba(148,163,184,0.18)]">
+          <div className="p-6 sm:p-8 rounded-[var(--round)] bg-[var(--coal)] border border-[var(--line-dark)]">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[var(--line-dark)]">
               <div>
-                <span className="text-xs font-mono text-[#10B981] font-semibold uppercase tracking-wider">
+                <span className="text-xs font-mono text-[var(--lime)] font-semibold uppercase tracking-wider">
                   Interactive Concurrency & State Machine Tester
                 </span>
-                <h3 className="text-xl font-bold text-[#F1F4FA] mt-1">
+                <h3 className="text-xl font-bold text-white mt-1">
                   OCC Idempotency & Partial Unique Index Sandbox
                 </h3>
               </div>
@@ -209,14 +211,14 @@ export const ArchitectureDeepDive: FC = () => {
               {/* Current Active State Display */}
               <div className="flex items-center gap-3">
                 <div className="text-right">
-                  <div className="text-[11px] font-mono text-[#8692A6]">ACTIVE STATE</div>
-                  <div className="text-sm font-mono font-bold text-[#F1F4FA] flex items-center gap-2">
+                  <div className="text-[11px] font-mono text-[var(--smoke)]">ACTIVE STATE</div>
+                  <div className="text-sm font-mono font-bold text-white flex items-center gap-2">
                     <span className={`w-2.5 h-2.5 rounded-full ${
-                      simState === 'IDLE' ? 'bg-slate-400' :
-                      simState === 'TRIGGERED' || simState === 'VERIFYING' ? 'bg-amber-400 animate-pulse' :
-                      simState === 'DISPATCHED' || simState === 'ESCALATED' ? 'bg-rose-500 animate-ping' :
-                      simState === 'ON_SCENE' ? 'bg-sky-400' :
-                      'bg-[#10B981]'
+                      simState === 'IDLE' ? 'bg-zinc-500' :
+                      simState === 'TRIGGERED' || simState === 'VERIFYING' ? 'bg-[var(--flame)]' :
+                      simState === 'DISPATCHED' || simState === 'ESCALATED' ? 'bg-[var(--flame)] ring-2 ring-[var(--flame)]/40' :
+                      simState === 'ON_SCENE' ? 'bg-[var(--lime)]' :
+                      'bg-[var(--lime)]'
                     }`} />
                     {simState}
                   </div>
@@ -224,7 +226,7 @@ export const ArchitectureDeepDive: FC = () => {
 
                 <button
                   onClick={resetSim}
-                  className="p-2 rounded-lg bg-[#07090F] hover:bg-slate-800 text-[#8692A6] hover:text-white transition-colors cursor-pointer border border-[rgba(148,163,184,0.18)]"
+                  className="p-2 rounded-lg bg-[var(--void)] hover:bg-zinc-800 text-[var(--smoke)] hover:text-white transition-colors cursor-pointer border border-[var(--line-dark)]"
                   title="Reset Simulator"
                 >
                   <RotateCcw className="w-4 h-4" />
@@ -235,7 +237,7 @@ export const ArchitectureDeepDive: FC = () => {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mt-6 items-start">
               {/* Simulator Controls (6 cols) */}
               <div className="lg:col-span-6 space-y-4">
-                <div className="text-xs font-mono uppercase tracking-wider text-[#8692A6] font-semibold">
+                <div className="text-xs font-mono uppercase tracking-wider text-[var(--smoke)] font-semibold">
                   Test Scenarios & Signal Injections
                 </div>
 
@@ -243,73 +245,73 @@ export const ArchitectureDeepDive: FC = () => {
                   <button
                     onClick={triggerAnomaly}
                     disabled={simState === 'VERIFYING' || simState === 'DISPATCHED'}
-                    className="p-3.5 rounded-xl bg-[#07090F] hover:bg-[#3C46D1]/20 disabled:opacity-40 text-left transition-all border border-[rgba(148,163,184,0.18)] text-xs font-mono text-[#F1F4FA] cursor-pointer"
+                    className="p-3.5 rounded-xl bg-[var(--void)] hover:bg-white/[0.04] disabled:opacity-40 text-left transition-all border border-[var(--line-dark)] hover:border-[var(--flame)]/40 text-xs font-mono text-[#f4f4f5] cursor-pointer"
                   >
-                    <div className="font-bold flex items-center gap-1.5 text-indigo-300">
-                      <Play className="w-3.5 h-3.5" />
+                    <div className="font-bold flex items-center gap-1.5 text-white">
+                      <Play className="w-3.5 h-3.5 text-[var(--flame)]" />
                       1. Trigger Anomaly
                     </div>
-                    <div className="text-[11px] text-[#8692A6] mt-1">Simulate watchOS crash / SpO2 anomaly</div>
+                    <div className="text-[11px] text-[var(--smoke)] mt-1">Simulate watchOS crash / SpO2 anomaly</div>
                   </button>
 
                   <button
                     onClick={cancelGrace}
                     disabled={simState !== 'VERIFYING' && simState !== 'TRIGGERED'}
-                    className="p-3.5 rounded-xl bg-[#07090F] hover:bg-emerald-600/20 disabled:opacity-40 text-left transition-all border border-[rgba(148,163,184,0.18)] text-xs font-mono text-[#F1F4FA] cursor-pointer"
+                    className="p-3.5 rounded-xl bg-[var(--void)] hover:bg-white/[0.04] disabled:opacity-40 text-left transition-all border border-[var(--line-dark)] hover:border-[var(--lime)]/40 text-xs font-mono text-[#f4f4f5] cursor-pointer"
                   >
-                    <div className="font-bold flex items-center gap-1.5 text-emerald-300">
-                      <CheckCircle className="w-3.5 h-3.5" />
+                    <div className="font-bold flex items-center gap-1.5 text-white">
+                      <CheckCircle className="w-3.5 h-3.5 text-[var(--lime)]" />
                       2. Wearer "I'm OK"
                     </div>
-                    <div className="text-[11px] text-[#8692A6] mt-1">Cancels within 10s grace window</div>
+                    <div className="text-[11px] text-[var(--smoke)] mt-1">Cancels within 10s grace window</div>
                   </button>
 
                   <button
                     onClick={dispatchAmbulance}
                     disabled={simState !== 'VERIFYING'}
-                    className="p-3.5 rounded-xl bg-[#07090F] hover:bg-rose-600/20 disabled:opacity-40 text-left transition-all border border-[rgba(148,163,184,0.18)] text-xs font-mono text-[#F1F4FA] cursor-pointer"
+                    className="p-3.5 rounded-xl bg-[var(--void)] hover:bg-white/[0.04] disabled:opacity-40 text-left transition-all border border-[var(--line-dark)] hover:border-[var(--flame)]/40 text-xs font-mono text-[#f4f4f5] cursor-pointer"
                   >
-                    <div className="font-bold flex items-center gap-1.5 text-rose-300">
-                      <AlertTriangle className="w-3.5 h-3.5" />
+                    <div className="font-bold flex items-center gap-1.5 text-white">
+                      <AlertTriangle className="w-3.5 h-3.5 text-[var(--flame)]" />
                       3. Grace Window Timeout
                     </div>
-                    <div className="text-[11px] text-[#8692A6] mt-1">Auto-dispatches Tier-1 EMS network</div>
+                    <div className="text-[11px] text-[var(--smoke)] mt-1">Auto-dispatches Tier-1 EMS network</div>
                   </button>
 
                   <button
                     onClick={injectDuplicatePacket}
                     disabled={simState === 'IDLE' || simState === 'RESOLVED' || simState === 'CANCELLED'}
-                    className="p-3.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 disabled:opacity-40 text-left transition-all border border-amber-500/30 text-xs font-mono text-amber-200 cursor-pointer"
+                    className="p-3.5 rounded-xl bg-[var(--void)] hover:bg-white/[0.04] disabled:opacity-40 text-left transition-all border border-[var(--line-dark)] hover:border-[var(--flame)]/40 text-xs font-mono text-[#f4f4f5] cursor-pointer"
                   >
-                    <div className="font-bold flex items-center gap-1.5 text-amber-400">
-                      <ShieldCheck className="w-3.5 h-3.5" />
+                    <div className="font-bold flex items-center gap-1.5 text-white">
+                      <ShieldCheck className="w-3.5 h-3.5 text-[var(--flame)]" />
                       4. Inject Duplicate Packet
                     </div>
-                    <div className="text-[11px] text-amber-300/70 mt-1">Proves OCC partial index block</div>
+                    <div className="text-[11px] text-[var(--smoke)] mt-1">Proves OCC partial index block</div>
                   </button>
 
                   <button
                     onClick={clinicianOnScene}
                     disabled={simState !== 'DISPATCHED' && simState !== 'ESCALATED'}
-                    className="p-3.5 rounded-xl bg-[#07090F] hover:bg-sky-600/20 disabled:opacity-40 text-left transition-all border border-[rgba(148,163,184,0.18)] text-xs font-mono text-[#F1F4FA] cursor-pointer"
+                    className="p-3.5 rounded-xl bg-[var(--void)] hover:bg-white/[0.04] disabled:opacity-40 text-left transition-all border border-[var(--line-dark)] hover:border-[var(--lime)]/40 text-xs font-mono text-[#f4f4f5] cursor-pointer"
                   >
-                    <div className="font-bold flex items-center gap-1.5 text-sky-300">
-                      <CheckCircle className="w-3.5 h-3.5" />
+                    <div className="font-bold flex items-center gap-1.5 text-white">
+                      <CheckCircle className="w-3.5 h-3.5 text-[var(--lime)]" />
                       5. Clinician Check-In
                     </div>
-                    <div className="text-[11px] text-[#8692A6] mt-1">HMAC GPS handshake on scene</div>
+                    <div className="text-[11px] text-[var(--smoke)] mt-1">HMAC GPS handshake on scene</div>
                   </button>
 
                   <button
                     onClick={resolveIncident}
                     disabled={simState !== 'ON_SCENE' && simState !== 'TRANSPORTING'}
-                    className="p-3.5 rounded-xl bg-[#07090F] hover:bg-emerald-600/20 disabled:opacity-40 text-left transition-all border border-[rgba(148,163,184,0.18)] text-xs font-mono text-[#F1F4FA] cursor-pointer"
+                    className="p-3.5 rounded-xl bg-[var(--void)] hover:bg-white/[0.04] disabled:opacity-40 text-left transition-all border border-[var(--line-dark)] hover:border-[var(--lime)]/40 text-xs font-mono text-[#f4f4f5] cursor-pointer"
                   >
-                    <div className="font-bold flex items-center gap-1.5 text-emerald-300">
-                      <CheckCircle className="w-3.5 h-3.5" />
+                    <div className="font-bold flex items-center gap-1.5 text-white">
+                      <CheckCircle className="w-3.5 h-3.5 text-[var(--lime)]" />
                       6. Finalize & Resolve
                     </div>
-                    <div className="text-[11px] text-[#8692A6] mt-1">Audit log closed, lock released</div>
+                    <div className="text-[11px] text-[var(--smoke)] mt-1">Audit log closed, lock released</div>
                   </button>
                 </div>
               </div>
@@ -317,26 +319,26 @@ export const ArchitectureDeepDive: FC = () => {
               {/* Simulator Live Logs (6 cols) */}
               <div className="lg:col-span-6 space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono uppercase tracking-wider text-[#8692A6] font-semibold flex items-center gap-1.5">
-                    <Terminal className="w-3.5 h-3.5 text-[#10B981]" />
+                  <span className="text-xs font-mono uppercase tracking-wider text-[var(--smoke)] font-semibold flex items-center gap-1.5">
+                    <Terminal className="w-3.5 h-3.5 text-[var(--lime)]" />
                     Live Audit Log Stream
                   </span>
-                  <span className="text-[10px] font-mono text-slate-500">Append-Only Invariant</span>
+                  <span className="text-[10px] font-mono text-zinc-500">Append-Only Invariant</span>
                 </div>
 
-                <div className="p-4 rounded-xl bg-[#07090F] border border-[rgba(148,163,184,0.18)] font-mono text-xs max-h-[300px] overflow-y-auto space-y-2">
+                <div className="p-4 rounded-xl bg-[var(--void)] border border-[var(--line-dark)] font-mono text-xs max-h-[300px] overflow-y-auto space-y-2">
                   {simLogs.map((log, i) => (
                     <div key={i} className="flex items-start gap-2 text-[11px] leading-tight">
-                      <span className="text-slate-500">{log.timestamp}</span>
-                      <span className={`px-1 rounded text-[10px] font-bold ${
-                        log.level === 'INFO' ? 'bg-emerald-500/20 text-[#10B981]' :
-                        log.level === 'WARN' ? 'bg-amber-500/20 text-[#F59E0B]' :
-                        'bg-rose-500/20 text-[#EF4444]'
+                      <span className="text-zinc-500">{log.timestamp}</span>
+                      <span className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${
+                        log.level === 'INFO' ? 'bg-[var(--lime)]/15 text-[var(--lime)]' :
+                        log.level === 'WARN' ? 'bg-white/10 text-[var(--smoke)]' :
+                        'bg-[var(--flame)]/15 text-[var(--flame)]'
                       }`}>
                         {log.level}
                       </span>
-                      <span className="text-indigo-300 font-semibold">{log.event}:</span>
-                      <span className="text-[#F1F4FA]">{log.details}</span>
+                      <span className="text-white font-semibold">{log.event}:</span>
+                      <span className="text-[#f4f4f5]">{log.details}</span>
                     </div>
                   ))}
                 </div>

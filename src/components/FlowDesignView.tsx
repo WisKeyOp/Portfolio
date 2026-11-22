@@ -352,44 +352,38 @@ def check_drug_interaction(drug_a: str, drug_b: str) -> InteractionResult:
 
   const [selectedNode, setSelectedNode] = useState<FlowNode>(nodes[0]);
 
-  // Clean DashResQ Tone Styles
+  // Clean Swiss Editorial Tone Styles
   const getTone = (color: string) => {
     switch (color) {
       case 'brand':
-        return {
-          border: 'border-[#3C46D1]',
-          bg: 'bg-[#3C46D1]/10',
-          text: 'text-indigo-300',
-          dot: 'bg-[#3C46D1]'
-        };
       case 'red':
         return {
-          border: 'border-[#EF4444]',
-          bg: 'bg-[#EF4444]/10',
-          text: 'text-[#F87171]',
-          dot: 'bg-[#EF4444]'
+          border: 'border-[var(--flame)]',
+          bg: 'bg-[var(--flame)]/10',
+          text: 'text-[var(--flame)]',
+          dot: 'bg-[var(--flame)]'
         };
       case 'green':
         return {
-          border: 'border-[#10B981]',
-          bg: 'bg-[#10B981]/10',
-          text: 'text-[#10B981]',
-          dot: 'bg-[#10B981]'
+          border: 'border-[var(--lime)]',
+          bg: 'bg-[var(--lime)]/10',
+          text: 'text-[var(--lime)]',
+          dot: 'bg-[var(--lime)]'
         };
       case 'amber':
         return {
-          border: 'border-[#F59E0B]',
-          bg: 'bg-[#F59E0B]/10',
-          text: 'text-[#F59E0B]',
-          dot: 'bg-[#F59E0B]'
+          border: 'border-white/20',
+          bg: 'bg-white/5',
+          text: 'text-white',
+          dot: 'bg-white'
         };
       case 'blue':
       default:
         return {
-          border: 'border-[#1D4ED8]',
-          bg: 'bg-[#1D4ED8]/10',
-          text: 'text-[#60A5FA]',
-          dot: 'bg-[#1D4ED8]'
+          border: 'border-[var(--line-dark)]',
+          bg: 'bg-white/5',
+          text: 'text-[var(--smoke)]',
+          dot: 'bg-zinc-400'
         };
     }
   };
@@ -398,30 +392,30 @@ def check_drug_interaction(drug_a: str, drug_b: str) -> InteractionResult:
     <div className="space-y-6">
       
       {/* ── CLEAN DASHRESQ FLOW CANVAS ── */}
-      <div className="rounded-2xl bg-[#151B28] border border-[rgba(148,163,184,0.18)] p-5 sm:p-7 relative shadow-xl">
+      <div className="rounded-[var(--round)] bg-[var(--coal)] border border-[var(--line-dark)] p-5 sm:p-7 relative shadow-xl">
         
         {/* Canvas Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 mb-6 border-b border-[rgba(148,163,184,0.14)] gap-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 mb-6 border-b border-[var(--line-dark)] gap-3">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-[#07090F] border border-[rgba(148,163,184,0.18)] flex items-center justify-center text-[#3C46D1]">
+            <div className="w-8 h-8 rounded-lg bg-[var(--void)] border border-[var(--line-dark)] flex items-center justify-center text-[var(--flame)]">
               <Workflow className="w-4 h-4" />
             </div>
             <div>
-              <h4 className="font-mono text-xs font-bold text-[#F1F4FA] uppercase tracking-wider">
+              <h4 className="font-mono text-xs font-bold text-white uppercase tracking-wider">
                 {type === 'topology' && 'Dual-Service Ingestion & Security Topology Flow'}
                 {type === 'statemachine' && '9-State Concurrency State Machine Flow'}
                 {type === 'langgraph' && 'Autonomous Multi-Agent Triage Execution Pipeline'}
               </h4>
-              <p className="text-[11px] font-mono text-[#8692A6]">
+              <p className="text-[11px] font-mono text-[var(--smoke)]">
                 Click any stage card to inspect failure mitigations and verified production code.
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 text-[11px] font-mono text-[#8692A6]">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#10B981]" />
-            <span className="text-[#10B981] font-semibold">STREAM FLOW ACTIVE</span>
-            <span className="text-slate-600">|</span>
+          <div className="flex items-center gap-2 text-[11px] font-mono text-[var(--smoke)]">
+            <span className="w-1.5 h-1.5 rounded-full bg-[var(--lime)]" />
+            <span className="text-[var(--lime)] font-semibold">STREAM FLOW ACTIVE</span>
+            <span className="text-zinc-600">|</span>
             <span>{nodes.length} STAGES</span>
           </div>
         </div>
@@ -439,33 +433,33 @@ def check_drug_interaction(drug_a: str, drug_b: str) -> InteractionResult:
                   onClick={() => setSelectedNode(node)}
                   className={`w-full p-4 rounded-xl cursor-pointer transition-all duration-200 border text-left ${
                     isSelected
-                      ? `bg-[#07090F] ${tone.border} shadow-md translate-y-[-2px]`
-                      : 'bg-[#0E1320] border-[rgba(148,163,184,0.14)] hover:border-slate-500'
+                      ? `bg-[var(--void)] ${tone.border} shadow-md translate-y-[-2px]`
+                      : 'bg-[var(--void)]/60 border-[var(--line-dark)] hover:border-zinc-500'
                   }`}
                 >
                   {/* Step Category & Badge */}
                   <div className="flex items-center justify-between gap-1 mb-2">
-                    <span className="text-[9.5px] font-mono font-bold uppercase tracking-wider text-[#8692A6]">
+                    <span className="text-[9.5px] font-mono font-bold uppercase tracking-wider text-[var(--smoke)]">
                       {node.category}
                     </span>
-                    <span className={`text-[9px] font-mono px-1.5 py-0.5 rounded border border-[rgba(148,163,184,0.18)] bg-[#07090F] ${tone.text}`}>
+                    <span className={`text-[9px] font-mono px-1.5 py-0.5 rounded border border-[var(--line-dark)] bg-[var(--void)] ${tone.text}`}>
                       {node.badge}
                     </span>
                   </div>
 
                   {/* Title */}
-                  <h5 className="text-sm font-bold text-[#F1F4FA] tracking-tight flex items-center gap-1.5">
+                  <h5 className="text-sm font-bold text-white tracking-tight flex items-center gap-1.5">
                     <span className={`w-1.5 h-1.5 rounded-full ${tone.dot} flex-shrink-0`} />
                     <span className="truncate">{node.title}</span>
                   </h5>
 
                   {/* Subtitle */}
-                  <p className="mt-1 text-[11px] text-[#8692A6] line-clamp-2 leading-relaxed">
+                  <p className="mt-1 text-[11px] text-[var(--smoke)] line-clamp-2 leading-relaxed">
                     {node.subtitle}
                   </p>
 
                   {/* Metric Ribbon */}
-                  <div className="mt-3 pt-2 border-t border-[rgba(148,163,184,0.12)] flex items-center justify-between text-[10px] font-mono text-[#8692A6]">
+                  <div className="mt-3 pt-2 border-t border-[var(--line-dark)] flex items-center justify-between text-[10px] font-mono text-[var(--smoke)]">
                     <span>Benchmark:</span>
                     <span className={`font-semibold ${tone.text}`}>{node.metrics}</span>
                   </div>
@@ -473,9 +467,9 @@ def check_drug_interaction(drug_a: str, drug_b: str) -> InteractionResult:
 
                 {/* Connecting Arrow (between nodes) */}
                 {index < nodes.length - 1 && (
-                  <div className="flex items-center justify-center py-1 lg:py-0 lg:px-1 text-slate-500">
-                    <div className="lg:hidden text-[#8692A6] font-mono text-xs">↓</div>
-                    <ArrowRight className="hidden lg:block w-3.5 h-3.5 text-slate-500" />
+                  <div className="flex items-center justify-center py-1 lg:py-0 lg:px-1 text-zinc-500">
+                    <div className="lg:hidden text-[var(--smoke)] font-mono text-xs">↓</div>
+                    <ArrowRight className="hidden lg:block w-3.5 h-3.5 text-zinc-500" />
                   </div>
                 )}
               </div>
@@ -484,37 +478,37 @@ def check_drug_interaction(drug_a: str, drug_b: str) -> InteractionResult:
         </div>
 
         {/* ── DETAIL INSPECTION DRAWER ── */}
-        <div className="mt-6 pt-5 border-t border-[rgba(148,163,184,0.14)] grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        <div className="mt-6 pt-5 border-t border-[var(--line-dark)] grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           
           {/* Left: Invariants & Failure Mitigation */}
           <div className="lg:col-span-6 space-y-3.5">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-[#3C46D1]" />
-                <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#F1F4FA]">
+                <ShieldCheck className="w-4 h-4 text-[var(--flame)]" />
+                <span className="text-xs font-mono font-bold uppercase tracking-wider text-white">
                   Stage Invariants: {selectedNode.title}
                 </span>
               </div>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#07090F] text-[#8692A6] border border-[rgba(148,163,184,0.18)]">
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[var(--void)] text-[var(--smoke)] border border-[var(--line-dark)]">
                 {selectedNode.category}
               </span>
             </div>
 
             <div className="space-y-2">
               {selectedNode.invariants.map((inv, idx) => (
-                <div key={idx} className="flex items-start gap-2.5 text-xs text-[#F1F4FA] leading-relaxed bg-[#07090F] p-3 rounded-xl border border-[rgba(148,163,184,0.14)]">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-[#10B981] mt-0.5 flex-shrink-0" />
+                <div key={idx} className="flex items-start gap-2.5 text-xs text-[#f4f4f5] leading-relaxed bg-[var(--void)] p-3 rounded-xl border border-[var(--line-dark)]">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-[var(--lime)] mt-0.5 flex-shrink-0" />
                   <span>{inv}</span>
                 </div>
               ))}
             </div>
 
-            <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs font-mono text-amber-200 leading-relaxed">
-              <div className="flex items-center gap-1.5 font-bold text-amber-400 mb-1">
+            <div className="p-3.5 rounded-xl bg-[var(--void)] border border-[var(--line-dark)] text-xs font-mono text-[var(--smoke)] leading-relaxed">
+              <div className="flex items-center gap-1.5 font-bold text-[var(--flame)] mb-1">
                 <AlertTriangle className="w-3.5 h-3.5" />
                 <span>FAILURE MODE DEFENSE:</span>
               </div>
-              <span>{selectedNode.failureMitigation}</span>
+              <span className="text-[#f4f4f5]">{selectedNode.failureMitigation}</span>
             </div>
           </div>
 
@@ -522,17 +516,17 @@ def check_drug_interaction(drug_a: str, drug_b: str) -> InteractionResult:
           <div className="lg:col-span-6">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
-                <FileCode2 className="w-4 h-4 text-sky-400" />
-                <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#8692A6]">
+                <FileCode2 className="w-4 h-4 text-[var(--smoke)]" />
+                <span className="text-xs font-mono font-bold uppercase tracking-wider text-[var(--smoke)]">
                   Verified Implementation Logic
                 </span>
               </div>
-              <span className="text-[10px] font-mono text-[#10B981] bg-[#10B981]/10 px-2 py-0.5 rounded border border-[#10B981]/20">
+              <span className="text-[10px] font-mono text-[var(--lime)] bg-[var(--lime)]/10 px-2 py-0.5 rounded border border-[var(--lime)]/20">
                 AUDITED
               </span>
             </div>
 
-            <div className="rounded-xl bg-[#07090F] border border-[rgba(148,163,184,0.18)] p-4 font-mono text-[11px] text-[#F1F4FA] overflow-x-auto leading-relaxed">
+            <div className="rounded-xl bg-[var(--void)] border border-[var(--line-dark)] p-4 font-mono text-[11px] text-[#f4f4f5] overflow-x-auto leading-relaxed">
               <pre>{selectedNode.codeSnippet}</pre>
             </div>
           </div>
