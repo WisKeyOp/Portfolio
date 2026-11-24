@@ -36,15 +36,6 @@ export const About: FC = () => {
               key={card.label}
               data-reveal
             >
-              {card.faces && (
-                <span className="stat__faces" aria-hidden="true">
-                  <i />
-                  <i />
-                  <i />
-                  <i />
-                </span>
-              )}
-
               <b
                 className="stat__num"
                 data-count={card.value}

@@ -65,8 +65,6 @@ export const TELEMETRY_NODES: TelemetryNode[] = [
         "LangGraph 5-stage medical triage with BM25 + dense pgvector hybrid retrieval.",
       ],
       failureModeMitigation: "Sensor jitter filtered through 14-day rolling Gaussian baselines. Stale updates trigger OCC re-read rather than silent overwrites.",
-      liveUrl: "https://www.dashresq.com",
-      githubUrl: "https://github.com/WisKeyOp/DashResQ_monorepo",
     },
   },
   {
@@ -101,7 +99,6 @@ export const TELEMETRY_NODES: TelemetryNode[] = [
         "Stateful LangGraph multi-agent automation with strict human-in-the-loop review gates.",
       ],
       failureModeMitigation: "Enforced token validation and strict tenant boundary filters across all vector query paths.",
-      liveUrl: "https://www.linkedin.com/in/aayush-shukla-a13752383",
     },
   },
   {
@@ -137,8 +134,6 @@ export const TELEMETRY_NODES: TelemetryNode[] = [
         "Tata Imagination Challenge Semifinalist (National technology ideation).",
       ],
       failureModeMitigation: "Refusal rule: reject sub-optimal O(N^2) routines when O(N log N) or O(N) alternatives exist.",
-      liveUrl: "https://leetcode.com/u/ecarte/",
-      githubUrl: "https://codeforces.com/profile/nobitalovesshizuka",
     },
   },
   {
@@ -173,7 +168,6 @@ export const TELEMETRY_NODES: TelemetryNode[] = [
         "Compensating transaction pipeline guaranteeing zero destructive updates.",
       ],
       failureModeMitigation: "Concurrent Double Spend: Blocked via version check in WHERE clause. Late-arriving events handled via deterministic replay.",
-      githubUrl: "https://github.com/WisKeyOp",
     },
   },
   {
@@ -324,7 +318,6 @@ export const TELEMETRY_NODES: TelemetryNode[] = [
         "Cloudinary CDN integration streaming documents directly with zero server memory footprint.",
       ],
       failureModeMitigation: "Enforced tenant isolation on all API middleware paths to prevent cross-account IDOR vulnerabilities.",
-      githubUrl: "https://github.com/WisKeyOp/Career-Connect",
     },
   },
 ];

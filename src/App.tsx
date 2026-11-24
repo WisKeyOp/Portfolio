@@ -12,6 +12,7 @@ import { Services } from './components/Services';
 import { Works } from './components/Works';
 import { Axioms } from './components/Axioms';
 import { Experience } from './components/Experience';
+import { Credentials } from './components/Credentials';
 import { Logos } from './components/Logos';
 // import { TelemetryMissionControl } from './components/TelemetryMissionControl';
 // import { ArchitectureDeepDive } from './components/ArchitectureDeepDive';
@@ -94,6 +95,9 @@ export const App: FC = () => {
 
         {/* Experience Snap Slider */}
         <Experience />
+
+        {/* Verified Credentials & Academic Rigor */}
+        <Credentials />
 
         {/* Systems Stack Marquee & Back-Out Popping Tiles */}
         <Logos />

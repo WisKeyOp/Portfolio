@@ -997,36 +997,6 @@ h4 {
   color: var(--invert-fg-soft);
 }
 
-/* Overlapping avatar dots above the third card */
-.stat__faces {
-  display: flex;
-  margin-bottom: 0.6rem;
-}
-
-.stat__faces i {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  border: 2px solid var(--card);
-  background: linear-gradient(140deg, var(--flame), #ffb08a);
-}
-
-.stat__faces i + i {
-  margin-left: -8px;
-}
-
-.stat__faces i:nth-child(2) {
-  background: linear-gradient(140deg, #2b2b2b, #6f6f6f);
-}
-
-.stat__faces i:nth-child(3) {
-  background: linear-gradient(140deg, #9fd23b, var(--lime));
-}
-
-.stat__faces i:nth-child(4) {
-  background: linear-gradient(140deg, #7aa7ff, #c9dbff);
-}
-
 /* Outlined headline + CTA */
 .about__tail {
   display: grid;
@@ -1605,20 +1575,6 @@ h4 {
   height: 100%;
   min-height: 220px;
   object-fit: cover;
-}
-
-.voice__play {
-  position: absolute;
-  inset: 0;
-  width: 44px;
-  height: 44px;
-  margin: auto;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.92);
-  color: var(--flame);
-  font-size: var(--fs-small);
 }
 
 .voice__body {
