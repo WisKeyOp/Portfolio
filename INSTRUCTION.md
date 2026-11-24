@@ -1,5 +1,7 @@
 # Portfolio — Systems Architecture & Engineering Specification
 
+**Remote Repository**: [https://github.com/WisKeyOp/Portfolio](https://github.com/WisKeyOp/Portfolio) (Branch: `main`)
+
 ## 1. Architectural Flow & Topology
 
 The Portfolio application is a high-performance, statically compiled showcase engineered for **Aayush Shukla** (Lead Systems Architect & AI Infrastructure Engineer). It serves as both an interactive resume and an audited failure-mode systems exhibition for high-scale distributed backends, IoT telemetry engines, and LangGraph multi-agent ecosystems.
