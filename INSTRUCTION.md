@@ -104,16 +104,19 @@ The Portfolio application is a high-performance, statically compiled showcase en
   - Integrated full tool manifest across: LangGraph, LangSmith, FastAPI, Azure, Docker, Kubernetes, PostgreSQL, Redis, Apache Kafka, Apache Spark, Databricks, BigQuery, ClickHouse, Apache Cassandra, Milvus, Qdrant, ChromaDB, Hugging Face, Ollama, vLLM, DeepSeek, PyTorch, v0, Claude Code, Cursor, Supabase, Git, Vite, Tailwind CSS, TypeScript, React, Python, C++, Go, Java, Linux.
 
 ### 1.7 Portrait Cutout Sub-Pixel Matting, Color Decontamination & Stage Integration (`scripts/refine_portrait.py` & `src/globals.css`)
+- **Direct U2-Net Salient Segmentation Architecture**:
+  - Replaced legacy GrabCut base masks (which suffered from asymmetric 45px shoulder clipping on foliage boundaries) with full-scale U2-Net salient human segmentation pinned to single-thread CPU execution (`intra_op_num_threads = 1`).
+  - Restored 15,568 missing pixels of the shoulders, sleeves, and lapels directly from `portrait-original.jpg`.
+  - Maintained exact 620x676 layout dimensions with symmetric margin distribution (14px left, 7px right) and solid baseline anchoring.
 - **Mathematical Alpha Matting & Defringing Pipeline**:
-  - **Closed-Form Alpha Matting (`PyMatting`)**: Solved the matting Laplacian linear system ($L\alpha = 0$) using a memory-stable Jacobi preconditioner to prevent Windows memory allocation crashes (avoiding `ichol` 1.86 GiB buffer failures).
-  - **Sub-Pixel Transition**: Expanded discrete 17-value step-aliased mask to full 256-level continuous 8-bit alpha gradient across 8,200+ boundary pixels.
+  - **Sub-Pixel Transition**: Full 256-level continuous 8-bit alpha gradient across boundary pixels, eliminating stair-stepped aliasing.
   - **Boundary Color Decontamination (`estimate_foreground_ml`)**: Reconstructed true local foreground color ($F$) at edge pixels, completely eliminating background sky, terrace wall, and green leaf color spill.
 - **Photographic Tone Harmonization & Color Grading**:
-  - **Specular Highlight Compression**: Rolled off harsh outdoor midday sunlight glare on glasses frames and forehead using soft-knee compression on upper luminance ($L > 175$).
+  - **Specular Highlight Compression**: Rolled off harsh outdoor midday sunlight glare on glasses frames and forehead using soft-knee compression on upper luminance ($L > 185$).
   - **Black Point Grounding**: Deepened suit shadow floor from lifted milky blue (RGB 17, 26, 38) down to rich architectural charcoal (RGB 8, 12, 18) without crushing fabric weave.
   - **Sunlit Shoulder Balancing**: Neutralized harsh sunlit flare on the right shoulder, harmonizing exposure across both shoulders.
   - **Green Despill**: Neutralized yellow-green ambient bounce from nearby foliage on the left lapel.
-  - **Studio Skin Tone Balance**: Gentle warm shift in LAB $A^*/B^*$ channels (+1.2 / +1.8) countering cold blue outdoor sky fill.
+  - **Studio Skin Tone Balance**: Gentle warm shift in LAB $A^*/B^*$ channels (+1.0 / +1.5) countering cold blue outdoor sky fill.
 - **Stage Depth & Grounding in CSS (`src/globals.css`)**:
   - **Atmospheric Rim Backlight (`.hero__figure::before`)**: Positioned radial depth gradient behind silhouette (subtle warm flame/white diffusion in Dark Mode, luminous eggshell diffusion in Light Mode) providing clean optical separation from hero typography.
   - **Dual-Layer Optical Drop Shadow (`.hero__figure img`)**: Applied `drop-shadow(0 20px 40px rgba(0,0,0,0.35)) drop-shadow(0 4px 10px rgba(0,0,0,0.18))` for physical grounding on both desktop and mobile viewports.
@@ -248,3 +251,9 @@ npm run preview
 - **Why**: Causes stair-stepped jagged edges (aliasing), bright sky/foliage halo fringes, washed-out lifted shadow floors, and a harsh "sticker" appearance against dark and light editorial backgrounds.
 - **Rule**: All photographic cutouts must undergo sub-pixel matting (256-level alpha), boundary foreground color reconstruction (`estimate_foreground_ml`), highlight knee rolloff, black-point alignment, and CSS atmospheric stage depth (rim backlight + optical drop shadow).
 - **Check**: Inspect cutout perimeter at $10\times$ zoom over both pure `#000000` and `#FFFFFF` backgrounds via Playwright; verify zero bright fringe halos, continuous alpha falloff, and smooth baseline fade.
+
+### Entry 09
+- **Mistake**: Bootstrapping alpha matting trimaps from defective legacy GrabCut masks instead of re-segmenting raw source imagery.
+- **Why**: GrabCut masks frequently suffer from edge clipping on low-contrast or foliage-adjacent contours (e.g. slicing 40-50px off human shoulders), and matting trimap erosion/dilation locks in that deformed geometry permanently.
+- **Rule**: Never derive trimaps from unverified legacy crops. Run deep salient segmentation (e.g. single-threaded U2-Net) directly on the full raw high-resolution source photo before executing matting, defringing, or cropping.
+- **Check**: Compare silhouette contour coordinates against the raw camera source; verify anatomical symmetry and complete preservation of shoulder/sleeve spans across all horizontal scanlines.
