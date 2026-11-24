@@ -98,6 +98,26 @@ The Portfolio application is a high-performance, statically compiled showcase en
   - *Current Status*: Commented out alongside `TelemetryMissionControl` in `src/App.tsx`, `Header.tsx`, `Offcanvas.tsx`, and `CommandMenu.tsx` per user instruction. Preserved intact for future redeployment.
 
 ### 1.6 Systems Stack & Primitives Icon Architecture (`Logos.tsx` & `portfolio-data.ts`)
+- **100% Vector SVG Tool Coverage**:
+  - Replaced all fallback text boxes and broken third-party image URLs with 36 high-fidelity, theme-adaptive vector SVGs.
+  - Implemented crisp dual-mode rendering: pure white `#FFFFFF` in dark bands, deep ink `#0B0B0B` in light bands, with dedicated brand hex accents (LangChain green `#1C3C3C`, Next.js black, Kafka orange, Azure blue, PyTorch red).
+  - Integrated full tool manifest across: LangGraph, LangSmith, FastAPI, Azure, Docker, Kubernetes, PostgreSQL, Redis, Apache Kafka, Apache Spark, Databricks, BigQuery, ClickHouse, Apache Cassandra, Milvus, Qdrant, ChromaDB, Hugging Face, Ollama, vLLM, DeepSeek, PyTorch, v0, Claude Code, Cursor, Supabase, Git, Vite, Tailwind CSS, TypeScript, React, Python, C++, Go, Java, Linux.
+
+### 1.7 Portrait Cutout Sub-Pixel Matting, Color Decontamination & Stage Integration (`scripts/refine_portrait.py` & `src/globals.css`)
+- **Mathematical Alpha Matting & Defringing Pipeline**:
+  - **Closed-Form Alpha Matting (`PyMatting`)**: Solved the matting Laplacian linear system ($L\alpha = 0$) using a memory-stable Jacobi preconditioner to prevent Windows memory allocation crashes (avoiding `ichol` 1.86 GiB buffer failures).
+  - **Sub-Pixel Transition**: Expanded discrete 17-value step-aliased mask to full 256-level continuous 8-bit alpha gradient across 8,200+ boundary pixels.
+  - **Boundary Color Decontamination (`estimate_foreground_ml`)**: Reconstructed true local foreground color ($F$) at edge pixels, completely eliminating background sky, terrace wall, and green leaf color spill.
+- **Photographic Tone Harmonization & Color Grading**:
+  - **Specular Highlight Compression**: Rolled off harsh outdoor midday sunlight glare on glasses frames and forehead using soft-knee compression on upper luminance ($L > 175$).
+  - **Black Point Grounding**: Deepened suit shadow floor from lifted milky blue (RGB 17, 26, 38) down to rich architectural charcoal (RGB 8, 12, 18) without crushing fabric weave.
+  - **Sunlit Shoulder Balancing**: Neutralized harsh sunlit flare on the right shoulder, harmonizing exposure across both shoulders.
+  - **Green Despill**: Neutralized yellow-green ambient bounce from nearby foliage on the left lapel.
+  - **Studio Skin Tone Balance**: Gentle warm shift in LAB $A^*/B^*$ channels (+1.2 / +1.8) countering cold blue outdoor sky fill.
+- **Stage Depth & Grounding in CSS (`src/globals.css`)**:
+  - **Atmospheric Rim Backlight (`.hero__figure::before`)**: Positioned radial depth gradient behind silhouette (subtle warm flame/white diffusion in Dark Mode, luminous eggshell diffusion in Light Mode) providing clean optical separation from hero typography.
+  - **Dual-Layer Optical Drop Shadow (`.hero__figure img`)**: Applied `drop-shadow(0 20px 40px rgba(0,0,0,0.35)) drop-shadow(0 4px 10px rgba(0,0,0,0.18))` for physical grounding on both desktop and mobile viewports.
+  - **Smooth Baseline Dissolve**: Graduated linear mask (`mask-image: linear-gradient(to bottom, #000 86%, rgba(0,0,0,0.75) 94%, transparent 100%)`) seamlessly fading suit into lower section boundary.
 - **100% Vector Asset Coverage Across All 5 Engineering Domains**:
   - Eliminated all placeholder text abbreviation lettermarks (`abbr`) across all 36 tools in `toolGroups`.
   - Added official brand-filled Simple Icons SVGs to `public/icons/`:
@@ -222,3 +242,9 @@ npm run preview
 - **Why**: Breaks visual cohesion across sections, produces jarring HUD sci-fi tropes, causes paint-invalidation jitter, and fails dark/light theme switching.
 - **Rule**: All sub-components must inherit strictly from `globals.css` design system tokens (`var(--paper)`, `var(--card)`, `var(--void)`, `var(--coal)`, `var(--flame)`, `var(--lime)`), remove unchoreographed ping/pulse loops, and scope specialized widgets (e.g., ECG canvas) strictly to the relevant project context.
 - **Check**: Grep codebase for foreign hex color codes and `animate-ping`; verify visual consistency and zero horizontal overflow in both light and dark modes via Playwright.
+
+### Entry 08
+- **Mistake**: Exporting raw binary mask cutouts without sub-pixel alpha matting, color decontamination (defringing), or tonal grounding.
+- **Why**: Causes stair-stepped jagged edges (aliasing), bright sky/foliage halo fringes, washed-out lifted shadow floors, and a harsh "sticker" appearance against dark and light editorial backgrounds.
+- **Rule**: All photographic cutouts must undergo sub-pixel matting (256-level alpha), boundary foreground color reconstruction (`estimate_foreground_ml`), highlight knee rolloff, black-point alignment, and CSS atmospheric stage depth (rim backlight + optical drop shadow).
+- **Check**: Inspect cutout perimeter at $10\times$ zoom over both pure `#000000` and `#FFFFFF` backgrounds via Playwright; verify zero bright fringe halos, continuous alpha falloff, and smooth baseline fade.

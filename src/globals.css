@@ -790,12 +790,50 @@ h3 {
   margin-inline: auto;
 }
 
+/* Atmospheric rim separation behind the portrait */
+.hero__figure::before {
+  content: "";
+  position: absolute;
+  inset: 5% 5% 5% 5%;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 65% 55% at 50% 45%,
+    rgba(255, 74, 23, 0.07) 0%,
+    rgba(255, 255, 255, 0.02) 45%,
+    transparent 72%
+  );
+  filter: blur(48px);
+  opacity: 0.9;
+  transform: translateZ(0);
+}
+
+:root[data-theme="light"] .hero__figure::before {
+  background: radial-gradient(
+    ellipse 70% 60% at 50% 45%,
+    rgba(255, 255, 255, 0.85) 0%,
+    rgba(244, 243, 241, 0.45) 50%,
+    transparent 75%
+  );
+  filter: blur(40px);
+  opacity: 0.95;
+}
+
 .hero__figure img {
   height: 100%;
   width: auto;
   object-fit: contain;
+  /* Multi-stage optical drop-shadow providing physical grounding */
+  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.35))
+          drop-shadow(0 4px 10px rgba(0, 0, 0, 0.18));
   /* Softens the cut edge where the PNG meets the section bottom. */
-  mask-image: linear-gradient(to bottom, #000 94%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 86%, rgba(0, 0, 0, 0.75) 94%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 86%, rgba(0, 0, 0, 0.75) 94%, transparent 100%);
+}
+
+:root[data-theme="light"] .hero__figure img {
+  filter: drop-shadow(0 20px 38px rgba(11, 11, 11, 0.12))
+          drop-shadow(0 4px 10px rgba(11, 11, 11, 0.06));
 }
 
 /*
