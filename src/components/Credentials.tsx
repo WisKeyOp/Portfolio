@@ -53,7 +53,7 @@ export const Credentials: FC = () => {
             <div>
               <div className="flex items-center justify-between text-xs font-mono text-[var(--slate)] mb-2">
                 <span className="flex items-center gap-1.5">
-                  <Trophy className="w-3.5 h-3.5 text-amber-500" />
+                  <Trophy className="w-3.5 h-3.5 text-[var(--flame-ink)]" />
                   <span>LeetCode Knight</span>
                 </span>
                 <ExternalLink className="w-3 h-3 text-[var(--slate)] group-hover:text-[var(--ink)] transition-colors" />
@@ -82,7 +82,7 @@ export const Credentials: FC = () => {
             <div>
               <div className="flex items-center justify-between text-xs font-mono text-[var(--slate)] mb-2">
                 <span className="flex items-center gap-1.5">
-                  <Award className="w-3.5 h-3.5 text-blue-500" />
+                  <Award className="w-3.5 h-3.5 text-[var(--flame-ink)]" />
                   <span>Codeforces Expert</span>
                 </span>
                 <ExternalLink className="w-3 h-3 text-[var(--slate)] group-hover:text-[var(--ink)] transition-colors" />

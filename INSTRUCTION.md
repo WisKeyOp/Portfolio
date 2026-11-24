@@ -258,3 +258,9 @@ npm run preview
 - **Why**: GrabCut masks frequently suffer from edge clipping on low-contrast or foliage-adjacent contours (e.g. slicing 40-50px off human shoulders), and matting trimap erosion/dilation locks in that deformed geometry permanently.
 - **Rule**: Never derive trimaps from unverified legacy crops. Run deep salient segmentation (e.g. single-threaded U2-Net) directly on the full raw high-resolution source photo before executing matting, defringing, or cropping.
 - **Check**: Compare silhouette contour coordinates against the raw camera source; verify anatomical symmetry and complete preservation of shoulder/sleeve spans across all horizontal scanlines.
+
+### Entry 10
+- **Mistake**: Design drift from un-tokenised values and stacked aesthetics.
+- **Why**: Each pass added its own palette, scale and effects instead of reusing existing ones.
+- **Rule**: Every visual value must come from an existing token in `globals.css`. If a new value is needed, propose adding it to the token set first.
+- **Check**: Grep for hardcoded hexes, Tailwind palette classes, and ad-hoc sizes in every PR.

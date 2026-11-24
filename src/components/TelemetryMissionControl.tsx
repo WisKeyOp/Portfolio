@@ -483,7 +483,7 @@ export const TelemetryMissionControl: FC = () => {
               {/* DUAL DISPLAY: ECG MONITOR FOR DASHRESQ, CLEAN METRICS STRIP FOR ALL OTHERS */}
               {activeNode.projectId === 'dashresq' ? (
                 <div className="rounded-xl border border-[var(--line)] bg-[#0a0a0a] p-3 overflow-hidden">
-                  <div className="flex items-center justify-between text-[11px] font-mono text-zinc-400 mb-1.5">
+                  <div className="flex items-center justify-between text-[11px] font-mono text-[var(--slate)] mb-1.5">
                     <span className="flex items-center gap-1.5 text-[var(--lime)] font-bold">
                       <Activity className="w-3.5 h-3.5" />
                       LIVE LEAD-II ECG HUD // 600 VITALS/MIN

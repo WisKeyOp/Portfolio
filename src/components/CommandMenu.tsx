@@ -77,16 +77,16 @@ export const CommandMenu: FC<CommandMenuProps> = ({
 
   // Command items
   const navigationItems = [
-    { id: 'work', label: 'Selected Projects & Engineering Work', icon: <Cpu className="w-4 h-4 text-emerald-400" />, section: 'Navigation', action: () => jumpTo('work') },
-    { id: 'axioms', label: 'Engineering Principles & Guarantees', icon: <ShieldCheck className="w-4 h-4 text-amber-400" />, section: 'Navigation', action: () => jumpTo('axioms') },
-    { id: 'experience', label: 'Work Experience & History', icon: <Layers className="w-4 h-4 text-blue-400" />, section: 'Navigation', action: () => jumpTo('experience') },
-    { id: 'contact', label: 'Get in Touch (Contact)', icon: <Terminal className="w-4 h-4 text-purple-400" />, section: 'Navigation', action: () => jumpTo('contact') },
+    { id: 'work', label: 'Selected Projects & Engineering Work', icon: <Cpu className="w-4 h-4 text-[var(--flame-ink)]" />, section: 'Navigation', action: () => jumpTo('work') },
+    { id: 'axioms', label: 'Engineering Principles & Guarantees', icon: <ShieldCheck className="w-4 h-4 text-[var(--flame-ink)]" />, section: 'Navigation', action: () => jumpTo('axioms') },
+    { id: 'experience', label: 'Work Experience & History', icon: <Layers className="w-4 h-4 text-[var(--flame-ink)]" />, section: 'Navigation', action: () => jumpTo('experience') },
+    { id: 'contact', label: 'Get in Touch (Contact)', icon: <Terminal className="w-4 h-4 text-[var(--flame-ink)]" />, section: 'Navigation', action: () => jumpTo('contact') },
   ];
 
   const projectItems = PROJECTS.map((p) => ({
     id: `project-${p.id}`,
     label: `${p.title} — ${p.subtitle}`,
-    icon: <Terminal className="w-4 h-4 text-orange-400" />,
+    icon: <Terminal className="w-4 h-4 text-[var(--flame)]" />,
     section: 'Selected Projects',
     action: () => {
       onSelectProject(p);
@@ -94,37 +94,11 @@ export const CommandMenu: FC<CommandMenuProps> = ({
     },
   }));
 
-  // Simulation items disabled while telemetry section is commented out
-  /*
-  const simulationItems = [
-    {
-      id: 'sim-occ',
-      label: 'Simulate OCC Concurrency Collision (idx_one_active_incident)',
-      icon: <Zap className="w-4 h-4 text-red-500" />,
-      section: 'Telemetry Simulation',
-      action: () => {
-        jumpTo('radar');
-        onTriggerSimulation?.('occ');
-      },
-    },
-    {
-      id: 'sim-spike',
-      label: 'Inject Sensor Fall & Arrhythmia Spike (168 bpm / 4.8G)',
-      icon: <Activity className="w-4 h-4 text-amber-500" />,
-      section: 'Telemetry Simulation',
-      action: () => {
-        jumpTo('radar');
-        onTriggerSimulation?.('spike');
-      },
-    },
-  ];
-  */
-
   const actionItems = [
     {
       id: 'act-resume',
       label: 'View Resume (CV)',
-      icon: <FileText className="w-4 h-4 text-emerald-400" />,
+      icon: <FileText className="w-4 h-4 text-[var(--lime)]" />,
       section: 'Quick Actions',
       action: () => {
         onOpenResume();
@@ -134,7 +108,7 @@ export const CommandMenu: FC<CommandMenuProps> = ({
     {
       id: 'act-theme',
       label: 'Toggle Dark / Light Theme',
-      icon: <Sun className="w-4 h-4 text-amber-400" />,
+      icon: <Sun className="w-4 h-4 text-[var(--flame-ink)]" />,
       section: 'Quick Actions',
       action: toggleTheme,
     },
@@ -162,11 +136,11 @@ export const CommandMenu: FC<CommandMenuProps> = ({
         aria-label="Command Palette"
       >
         {/* Search Input Bar */}
-        <div className="flex items-center gap-3 px-4 py-3.5 border-b border-white/10 bg-black/30">
-          <Search className="w-4 h-4 text-neutral-400 shrink-0" />
+        <div className="flex items-center gap-3 px-4 py-3.5 border-b border-[var(--line)] bg-[var(--mute)]">
+          <Search className="w-4 h-4 text-[var(--slate)] shrink-0" />
           <input
             type="text"
-            className="w-full bg-transparent text-sm text-neutral-100 placeholder-neutral-500 outline-none font-sans"
+            className="w-full bg-transparent text-sm text-[var(--ink)] placeholder-[var(--slate)] outline-none font-sans"
             placeholder="Search systems, telemetry simulations, invariants, or jump to section..."
             value={query}
             onChange={(e) => {
@@ -175,12 +149,12 @@ export const CommandMenu: FC<CommandMenuProps> = ({
             }}
             autoFocus
           />
-          <kbd className="hidden sm:inline-flex items-center gap-1 px-1.5 py-0.5 text-[10px] font-mono text-neutral-400 bg-neutral-800 rounded border border-neutral-700">
+          <kbd className="hidden sm:inline-flex items-center gap-1 px-1.5 py-0.5 text-[10px] font-mono text-[var(--slate)] bg-[var(--card)] rounded-[var(--r-sm)] border border-[var(--line)]">
             ESC
           </kbd>
           <button
             onClick={onClose}
-            className="text-neutral-400 hover:text-neutral-200 p-1"
+            className="text-[var(--slate)] hover:text-[var(--ink)] p-1 cursor-pointer"
             aria-label="Close command palette"
           >
             <X className="w-4 h-4" />
@@ -188,9 +162,9 @@ export const CommandMenu: FC<CommandMenuProps> = ({
         </div>
 
         {/* Results List */}
-        <div className="max-h-[380px] overflow-y-auto p-2 divide-y divide-white/[0.04]">
+        <div className="max-h-[380px] overflow-y-auto p-2 divide-y divide-[var(--line)]">
           {filtered.length === 0 ? (
-            <div className="py-12 text-center text-sm text-neutral-500 font-mono">
+            <div className="py-12 text-center text-sm text-[var(--slate)] font-mono">
               No matching architectural modules or commands found.
             </div>
           ) : (
@@ -199,34 +173,34 @@ export const CommandMenu: FC<CommandMenuProps> = ({
                 key={item.id}
                 onClick={item.action}
                 onMouseEnter={() => setSelectedIndex(idx)}
-                className={`w-full flex items-center justify-between gap-3 px-3.5 py-2.5 rounded-lg text-left text-xs transition-colors duration-150 ${selectedIndex === idx
-                    ? 'bg-neutral-800/80 text-white'
-                    : 'text-neutral-300 hover:bg-neutral-800/40 hover:text-neutral-100'
+                className={`w-full flex items-center justify-between gap-3 px-3.5 py-2.5 rounded-[var(--r-md)] text-left text-xs transition-colors duration-150 cursor-pointer ${selectedIndex === idx
+                    ? 'bg-[var(--mute)] text-[var(--ink)] font-semibold'
+                    : 'text-[var(--slate)] hover:bg-[var(--mute)] hover:text-[var(--ink)]'
                   }`}
               >
                 <div className="flex items-center gap-3 min-w-0">
-                  <span className="p-1 rounded bg-neutral-900 border border-white/5 shrink-0">
+                  <span className="p-1 rounded-[var(--r-sm)] bg-[var(--mute)] border border-[var(--line)] shrink-0">
                     {item.icon}
                   </span>
                   <div className="min-w-0">
-                    <p className="font-medium truncate text-neutral-200">{item.label}</p>
-                    <p className="text-[10px] text-neutral-500 font-mono">{item.section}</p>
+                    <p className="font-medium truncate text-[var(--ink)]">{item.label}</p>
+                    <p className="text-[10px] text-[var(--slate)] font-mono">{item.section}</p>
                   </div>
                 </div>
-                <ArrowRight className="w-3.5 h-3.5 text-neutral-500 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <ArrowRight className="w-3.5 h-3.5 text-[var(--slate)] shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
               </button>
             ))
           )}
         </div>
 
         {/* Footer info bar */}
-        <div className="px-4 py-2 border-t border-white/10 bg-black/40 flex items-center justify-between text-[11px] text-neutral-500 font-mono">
+        <div className="px-4 py-2 border-t border-[var(--line)] bg-[var(--mute)] flex items-center justify-between text-[11px] text-[var(--slate)] font-mono">
           <div className="flex items-center gap-3">
             <span>↑↓ Navigate</span>
             <span>↵ Select</span>
           </div>
-          <div className="flex items-center gap-1.5 text-emerald-400">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+          <div className="flex items-center gap-1.5 text-[var(--flame-ink)]">
+            <span className="w-1.5 h-1.5 rounded-full bg-[var(--flame)]" />
             <span>OCC State Machine Active</span>
           </div>
         </div>
