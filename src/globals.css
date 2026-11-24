@@ -47,7 +47,7 @@
 
 /* ---------------------------------------------------------------
    Dark theme. Set by the toggle in the header and persisted to
-   localStorage; the inline script in layout.jsx applies it before
+   localStorage; the inline script in index.html applies it before
    first paint so there is no flash.
    --------------------------------------------------------------- */
 
@@ -76,10 +76,6 @@
 [data-theme="dark"] .dark {
   background: #050505;
   border-block: 1px solid rgba(255, 255, 255, 0.07);
-}
-
-[data-theme="dark"] .works {
-  background: var(--paper);
 }
 
 /* ===============================================================
@@ -1060,93 +1056,6 @@ h3 {
 
 .statement__word.is-lit {
   color: var(--ink);
-}
-
-/* ===============================================================
-   Bio
-   =============================================================== */
-
-.bio {
-  position: relative;
-  padding-bottom: clamp(4rem, 12vh, 9rem);
-}
-
-.bio__grid {
-  display: grid;
-  grid-template-columns: 0.95fr 1.05fr;
-  gap: clamp(1.5rem, 4vw, 4rem);
-  align-items: start;
-}
-
-.bio__photo {
-  border-radius: var(--round);
-  overflow: hidden;
-}
-
-.bio__photo img {
-  width: 100%;
-  aspect-ratio: 5 / 4;
-  object-fit: cover;
-  /* Anchor to the top so any crop takes from the bottom — keeps the head/hair. */
-  object-position: top center;
-}
-
-.bio__copy {
-  display: grid;
-  gap: 1.1rem;
-  max-width: 68ch;
-  font-size: 1.5rem;  
-  color: var(--slate);
-}
-
-/* Circle badge — starts white, flips to orange when it scrolls in */
-.bio__badge {
-  position: absolute;
-  right: clamp(1rem, 6vw, 8rem);
-  bottom: clamp(1rem, 4vh, 3rem);
-  display: grid;
-  place-content: center;
-  justify-items: center;
-  gap: 0.15rem;
-  width: clamp(120px, 14vw, 170px);
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: var(--card);
-  color: var(--ink);
-  box-shadow: var(--shadow-lg);
-  text-align: center;
-  will-change: transform;
-  transition: background 0.7s var(--ease), color 0.7s var(--ease),
-    box-shadow 0.5s var(--ease), scale 0.5s var(--ease);
-}
-
-.bio__badge.is-in {
-  background: var(--flame);
-  color: #fff;
-}
-
-/* Grows a little while the pointer is within reach */
-.bio__badge.is-near {
-  box-shadow: 0 30px 70px color-mix(in srgb, var(--flame) 42%, transparent);
-  scale: 1.07;
-}
-
-.bio__badge b {
-  will-change: transform;
-}
-
-.bio__badge b {
-  font-family: var(--font-display), sans-serif;
-  font-size: clamp(1.9rem, 3vw, 2.8rem);
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  line-height: 1;
-}
-
-.bio__badge-label {
-  font-size: 0.85rem;
-  letter-spacing: 0.02em;
-  max-width: 9ch;
 }
 
 /* ===============================================================
@@ -2177,125 +2086,6 @@ h3 {
 }
 
 /* ===============================================================
-   Project popup
-   =============================================================== */
-
-.popup {
-  position: fixed;
-  inset: 0;
-  z-index: 150;
-  display: grid;
-  place-items: center;
-  padding: var(--gutter);
-  background: rgba(0, 0, 0, 0.72);
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.4s var(--ease), visibility 0.4s;
-}
-
-.popup.is-open {
-  opacity: 1;
-  visibility: visible;
-}
-
-.popup__panel {
-  position: relative;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  width: min(940px, 100%);
-  max-height: 86vh;
-  overflow: auto;
-  border-radius: var(--round);
-  background: var(--card);
-  color: var(--ink);
-  transform: translateY(20px);
-  transition: transform 0.5s var(--ease);
-}
-
-.popup.is-open .popup__panel {
-  transform: none;
-}
-
-.popup__close {
-  position: absolute;
-  top: 0.9rem;
-  right: 0.9rem;
-  z-index: 2;
-  display: grid;
-  place-items: center;
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  background: var(--invert-bg);
-  color: var(--invert-fg);
-}
-
-.popup__media img {
-  width: 100%;
-  height: 100%;
-  min-height: 260px;
-  object-fit: cover;
-}
-
-.popup__body {
-  display: grid;
-  align-content: start;
-  gap: 0.85rem;
-  padding: clamp(1.5rem, 3vw, 2.5rem);
-}
-
-.popup__kicker {
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--flame);
-}
-
-.popup__title {
-  font-size: clamp(1.3rem, 2.4vw, 1.9rem);
-  font-weight: 800;
-  text-transform: uppercase;
-}
-
-.popup__text {
-  font-size: 1.06rem;
-  color: var(--slate);
-}
-
-.popup__stack {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
-}
-
-.popup__stack span {
-  padding: 0.3rem 0.7rem;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  font-size: 0.8rem;
-}
-
-.popup__link {
-  justify-self: start;
-  margin-top: 0.5rem;
-  padding: 0.8rem 1.4rem;
-  border-radius: 999px;
-  background: var(--invert-bg);
-  color: var(--invert-fg);
-  font-size: 0.89rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-
-.popup__link:hover {
-  background: var(--flame);
-}
-
-.popup__link i {
-  font-style: normal;
-}
-
-/* ===============================================================
    Back to top
    =============================================================== */
 
@@ -2361,9 +2151,7 @@ h3 {
   }
 
   .about__grid,
-  .bio__grid,
-  .contact__grid,
-  .popup__panel {
+  .contact__grid {
     grid-template-columns: 1fr;
   }
 
@@ -2374,11 +2162,6 @@ h3 {
   .about__floats {
     flex-direction: column;
     gap: 0.75rem;
-  }
-
-  .bio__badge {
-    position: static;
-    margin: 2rem auto 0;
   }
 
   .svc {
@@ -2555,54 +2338,6 @@ h3 {
     linear-gradient(to bottom, rgba(148, 163, 184, 0.05) 1px, transparent 1px);
 }
 
-.drq-card {
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: var(--round);
-  transition: transform 0.25s ease, border-color 0.25s ease;
-}
-
-.drq-card:hover {
-  border-color: var(--flame);
-}
-
-@keyframes rescuePing {
-  0% {
-    transform: scale(1);
-    opacity: 0.55;
-  }
-  100% {
-    transform: scale(2.2);
-    opacity: 0;
-  }
-}
-
-@keyframes rescueDash {
-  to {
-    stroke-dashoffset: -60;
-  }
-}
-
-@keyframes rescueRise {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-@keyframes rescueBlink {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.35;
-  }
-}
-
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
@@ -2617,73 +2352,4 @@ h3 {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--flame);
-}
-
-
-
-/* ===============================================================
-   DashResQ Tactical Map & Telemetry Animations
-   =============================================================== */
-
-/* Clean architectural pulse */
-.drq-ping {
-  opacity: 0.4;
-}
-
-/* Dispatch polyline dash translation */
-@keyframes rescueDash {
-  to {
-    stroke-dashoffset: -32;
-  }
-}
-
-.animated-route-line {
-  stroke-dasharray: 8 10;
-  animation: rescueDash 1.2s linear infinite;
-}
-
-/* Leaflet dark theme customizations — strict design system tokens */
-.drq-leaflet-container {
-  background: var(--coal) !important;
-  font-family: var(--font-mono);
-}
-
-.drq-leaflet-container .leaflet-tile-pane {
-  filter: contrast(108%) brightness(96%);
-}
-
-.drq-leaflet-container .leaflet-control-attribution {
-  background: rgba(10, 10, 10, 0.85) !important;
-  color: var(--smoke) !important;
-  font-size: 10px !important;
-  font-family: var(--font-mono) !important;
-  backdrop-filter: blur(4px);
-  border-top-left-radius: 6px;
-  padding: 2px 6px !important;
-}
-
-.drq-leaflet-container .leaflet-control-attribution a {
-  color: var(--slate) !important;
-  text-decoration: none;
-}
-.drq-leaflet-container .leaflet-control-attribution a:hover {
-  color: var(--flame) !important;
-  text-decoration: underline;
-}
-
-.drq-popup .leaflet-popup-content-wrapper {
-  background: var(--coal) !important;
-  color: var(--ink) !important;
-  border: 1px solid var(--line-dark) !important;
-  border-radius: 8px !important;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5) !important;
-  padding: 0 !important;
-}
-.drq-popup .leaflet-popup-content {
-  margin: 10px 14px !important;
-  font-size: 11px !important;
-  line-height: 1.4 !important;
-}
-.drq-popup .leaflet-popup-tip {
-  background: var(--coal) !important;
 }

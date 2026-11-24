@@ -28,7 +28,7 @@ The Portfolio application is a high-performance, statically compiled showcase en
   Blends the editorial layout and smooth typography of high-craft portfolios with Shadcn UI precision primitives (Command Palette, Segmented Pill Tabs, Invariant Badges, Glass Nav Dock) and DashResQ mission-critical telemetry controls.
 - **Color Discipline**:
   - Light Mode Surface: `--paper: #f4f3f1`, `--card: #ffffff`, `--ink: #0b0b0b`, `--slate: #6d6d6d`
-  - Dark Mode Depth: `--paper: #06080d`, `--card: #121824`, `--ink: #f2f1ef`, `--slate: #9d9d9d`
+  - Dark Mode Depth: `--paper: #0d0d0d`, `--card: #181818`, `--ink: #f2f1ef`, `--slate: #9d9d9d`
   - Kinetic Accents: `--flame: #ff4a17` (primary brand, cursor, CTA), `--lime: #cbff3a` (status ping, progress), `--line: rgba(255,255,255,0.08)`
 - **Typographic Hierarchy**:
   - Display Headline: `Archivo` (weight 800-900, tight tracking -0.04em)
@@ -94,15 +94,14 @@ The Portfolio application is a high-performance, statically compiled showcase en
   - Minimal Swiss Geo Anchors overlay (`bg-[var(--void)]/85 border border-[var(--line-dark)] text-[var(--smoke)]`).
   - Replaced floating legend with a quiet 1-line inline footer strip beneath the canvas.
   - Scoped Lead-II ECG canvas strictly to DashResQ (`activeNode.projectId === 'dashresq'`) on `#0a0a0a` background with nominal `var(--lime)` and shock `var(--flame)` traces. Non-DashResQ projects render a clean 2-column metrics & runtime ports summary card.
-- **Mounted `ArchitectureDeepDive.tsx`**:
-  - Positioned as a dedicated `.dark` editorial band (`#architecture`) immediately following `#radar`.
-  - Houses the 9-State OCC Machine, Ingestion Topology, LangGraph Triage Flow, and the interactive Live OCC Sandbox with append-only audit stream.
+- **`ArchitectureDeepDive.tsx` (Commented Out)**:
+  - Preserved in codebase; houses the 9-State OCC Machine, Ingestion Topology, LangGraph Triage Flow, and the interactive Live OCC Sandbox with append-only audit stream.
   - *Current Status*: Commented out alongside `TelemetryMissionControl` in `src/App.tsx`, `Header.tsx`, `Offcanvas.tsx`, and `CommandMenu.tsx` per user instruction. Preserved intact for future redeployment.
 
 ### 1.6 Systems Stack & Primitives Icon Architecture (`Logos.tsx` & `portfolio-data.ts`)
 - **100% Vector SVG Tool Coverage**:
   - Replaced all fallback text boxes and broken third-party image URLs with 36 high-fidelity, theme-adaptive vector SVGs.
-  - Implemented crisp dual-mode rendering: pure white `#FFFFFF` in dark bands, deep ink `#0B0B0B` in light bands, with dedicated brand hex accents (LangChain green `#1C3C3C`, Next.js black, Kafka orange, Azure blue, PyTorch red).
+  - Implemented crisp dual-mode rendering: pure white `#FFFFFF` in dark bands, deep ink `#0B0B0B` in light bands, with dedicated brand hex accents (LangChain green `#10B981`, Next.js black `#0B0B0B`, Azure blue `#0078D4`, Redis red `#FF4438`).
   - Integrated full tool manifest across: LangGraph, LangSmith, FastAPI, Azure, Docker, Kubernetes, PostgreSQL, Redis, Apache Kafka, Apache Spark, Databricks, BigQuery, ClickHouse, Apache Cassandra, Milvus, Qdrant, ChromaDB, Hugging Face, Ollama, vLLM, DeepSeek, PyTorch, v0, Claude Code, Cursor, Supabase, Git, Vite, Tailwind CSS, TypeScript, React, Python, C++, Go, Java, Linux.
 
 ### 1.7 Portrait Cutout Sub-Pixel Matting, Color Decontamination & Stage Integration (`scripts/refine_portrait.py` & `src/globals.css`)

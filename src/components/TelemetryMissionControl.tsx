@@ -24,6 +24,7 @@ import { PROJECTS, EXPERIENCES, COMPETITIVE_STATS } from '../data/portfolio-data
 import type { Project } from '../data/portfolio-data';
 import { ProjectModal } from './ProjectModal';
 import { GithubIcon } from './Icons';
+import '../styles/dormant-telemetry.css';
 
 export const TelemetryMissionControl: FC = () => {
   const [activeNode, setActiveNode] = useState<TelemetryNode>(TELEMETRY_NODES[0]);
