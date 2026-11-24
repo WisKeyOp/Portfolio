@@ -8,7 +8,7 @@ export const Experience: FC = () => {
         Engineering high-integrity distributed backends, LangGraph multi-agent ecosystems, and safety-critical telemetry pipelines.
       </h2>
 
-      <div className="voices__viewport">
+      <div className="voices__viewport" tabIndex={0} role="region" aria-label="Work experience slider">
         <div className="voices__track" id="voicesTrack">
           {EXPERIENCES.map((item) => (
             <article className="voice" key={`${item.company}-${item.role}`}>
@@ -53,7 +53,7 @@ export const Experience: FC = () => {
             key={`${item.company}-${i}`}
             data-dot={i}
             role="tab"
-            aria-label={`${item.company} — ${item.role}`}
+            aria-label={`Slide ${i + 1} of ${EXPERIENCES.length}: ${item.company} — ${item.role}`}
             aria-selected={i === 0}
           />
         ))}

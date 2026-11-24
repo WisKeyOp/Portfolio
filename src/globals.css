@@ -212,6 +212,19 @@ h4 {
   outline-offset: 3px;
 }
 
+.nav a:focus-visible,
+.offcanvas__nav a:focus-visible,
+.footer__links a:focus-visible,
+.vcard__links a:focus-visible,
+.theme-toggle:focus-visible,
+.grid-btn:focus-visible,
+.voices__dots button:focus-visible,
+.btn:focus-visible,
+.wcard:focus-visible {
+  outline: 2px solid var(--flame);
+  outline-offset: 2px;
+}
+
 ::selection {
   background: var(--flame);
   color: #fff;
@@ -718,8 +731,8 @@ html.no-js [data-fade] {
   right: clamp(1rem, 3vw, 2rem);
   display: grid;
   place-items: center;
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   border: 1px solid var(--line-dark);
   color: #fff;
@@ -1651,11 +1664,22 @@ html.no-js [data-fade] {
 }
 
 .voices__dots button {
+  position: relative;
   width: 30px;
   height: 5px;
   border-radius: var(--r-pill);
   background: var(--line);
   transition: background var(--dur-base) var(--ease), width var(--dur-base) var(--ease);
+}
+
+.voices__dots button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  min-width: 44px;
+  min-height: 44px;
 }
 
 .voices__dots button[aria-selected="true"] {
@@ -1952,23 +1976,23 @@ html.no-js [data-fade] {
 
 .vcard > div > span {
   font-size: var(--fs-small);
-  color: var(--smoke);
+  color: var(--slate);
 }
 
 .vcard__links {
   display: flex;
-  gap: 0.4rem;
+  gap: 0.5rem;
   margin-top: 0.5rem;
 }
 
 .vcard__links a {
   display: grid;
   place-items: center;
-  width: 28px;
-  height: 28px;
+  width: 40px;
+  height: 40px;
   border: 1px solid var(--line-dark);
   border-radius: 50%;
-  font-size: var(--fs-micro);
+  font-size: var(--fs-small);
   transition: background var(--dur-base) var(--ease), color var(--dur-base) var(--ease);
 }
 

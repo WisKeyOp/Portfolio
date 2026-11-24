@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import type { FC } from 'react';
 import { 
   ArrowLeft, 
@@ -69,6 +69,8 @@ const parseFailureMode = (text: string) => {
 
 export const ProjectModal: FC<ProjectModalProps> = ({ project, onClose }) => {
   const [modalFlowType, setModalFlowType] = useState<'topology' | 'statemachine' | 'langgraph'>('topology');
+  const modalRef = useRef<HTMLDivElement>(null);
+  const closeBtnRef = useRef<HTMLButtonElement>(null);
 
   // Safe back navigation handler respecting browser history
   const handleClose = useCallback(() => {
@@ -79,7 +81,7 @@ export const ProjectModal: FC<ProjectModalProps> = ({ project, onClose }) => {
     }
   }, [onClose]);
 
-  // Synchronize modal state with Browser History (popstate) & Keyboard (Escape)
+  // Synchronize modal state with Browser History, Keyboard (Escape) & Focus Trap
   useEffect(() => {
     if (!project) return;
 
@@ -95,6 +97,28 @@ export const ProjectModal: FC<ProjectModalProps> = ({ project, onClose }) => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         handleClose();
+        return;
+      }
+
+      if (e.key === 'Tab' && modalRef.current) {
+        const focusable = modalRef.current.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'
+        );
+        if (!focusable.length) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+
+        if (e.shiftKey) {
+          if (document.activeElement === first) {
+            last.focus();
+            e.preventDefault();
+          }
+        } else {
+          if (document.activeElement === last) {
+            first.focus();
+            e.preventDefault();
+          }
+        }
       }
     };
 
@@ -102,7 +126,13 @@ export const ProjectModal: FC<ProjectModalProps> = ({ project, onClose }) => {
     window.addEventListener('keydown', handleKeyDown);
     document.body.style.overflow = 'hidden';
 
+    // Auto-focus close button on mount
+    const timer = setTimeout(() => {
+      closeBtnRef.current?.focus();
+    }, 50);
+
     return () => {
+      clearTimeout(timer);
       window.removeEventListener('popstate', handlePopState);
       window.removeEventListener('keydown', handleKeyDown);
       document.body.style.overflow = '';
@@ -115,11 +145,12 @@ export const ProjectModal: FC<ProjectModalProps> = ({ project, onClose }) => {
 
   return (
     <div 
+      ref={modalRef}
       className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-6 md:p-8 bg-black/85 backdrop-blur-md overflow-y-auto"
       onClick={handleClose}
       role="dialog"
       aria-modal="true"
-      aria-label={`${project.title} Architectural Case Study`}
+      aria-labelledby="modal-project-title"
     >
       <style>{`
         @keyframes modalScaleIn {
@@ -196,6 +227,7 @@ export const ProjectModal: FC<ProjectModalProps> = ({ project, onClose }) => {
             )}
 
             <button
+              ref={closeBtnRef}
               onClick={handleClose}
               className="p-1.5 rounded-[var(--r-sm)] text-[var(--slate)] hover:text-[var(--ink)] hover:bg-[var(--mute)] transition-colors cursor-pointer"
               title="Close (ESC)"
@@ -218,7 +250,7 @@ export const ProjectModal: FC<ProjectModalProps> = ({ project, onClose }) => {
           </div>
 
           {/* Large Crisp Title & Subtitle */}
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-[var(--ink)] mt-2">
+          <h2 id="modal-project-title" className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-[var(--ink)] mt-2">
             {project.title}
           </h2>
           <p className="text-sm sm:text-base text-[var(--slate)] mt-2 max-w-[65ch] leading-relaxed">

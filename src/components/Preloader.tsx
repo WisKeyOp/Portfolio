@@ -37,6 +37,7 @@ export const Preloader: FC = () => {
     <div
       className="preloader"
       id="preloader"
+      aria-hidden="true"
       onClick={() => {
         setDismissed(true);
         document.body.style.overflow = '';

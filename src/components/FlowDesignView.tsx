@@ -421,7 +421,12 @@ def check_drug_interaction(drug_a: str, drug_b: str) -> InteractionResult:
         </div>
 
         {/* ── HORIZONTAL FLOW SEQUENCE ── */}
-        <div className="flex flex-col lg:flex-row items-stretch justify-between gap-2.5 overflow-x-auto pb-2">
+        <div 
+          className="flex flex-col lg:flex-row items-stretch justify-between gap-2.5 overflow-x-auto pb-2"
+          tabIndex={0}
+          role="region"
+          aria-label="Interactive architecture stages"
+        >
           {nodes.map((node, index) => {
             const isSelected = selectedNode.id === node.id;
             const tone = getTone(node.color);
@@ -526,7 +531,12 @@ def check_drug_interaction(drug_a: str, drug_b: str) -> InteractionResult:
               </span>
             </div>
 
-            <div className="rounded-[var(--r-sm)] bg-[#0d0d0d] border border-[var(--line)] p-4 font-mono text-[11px] text-[#e4e4e7] overflow-x-auto leading-relaxed shadow-inner">
+            <div 
+              className="rounded-[var(--r-sm)] bg-[#0d0d0d] border border-[var(--line)] p-4 font-mono text-[11px] text-[#e4e4e7] overflow-x-auto leading-relaxed shadow-inner"
+              tabIndex={0}
+              role="region"
+              aria-label="Implementation logic code block"
+            >
               <pre>{selectedNode.codeSnippet}</pre>
             </div>
           </div>
