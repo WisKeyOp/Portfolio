@@ -211,10 +211,10 @@ export const ArchitectureDeepDive: FC = () => {
               {/* Current Active State Display */}
               <div className="flex items-center gap-3">
                 <div className="text-right">
-                  <div className="text-[11px] font-mono text-[var(--smoke)]">ACTIVE STATE</div>
+                  <div className="text-[11px] font-mono text-[var(--slate)]">ACTIVE STATE</div>
                   <div className="text-sm font-mono font-bold text-white flex items-center gap-2">
                     <span className={`w-2.5 h-2.5 rounded-full ${
-                      simState === 'IDLE' ? 'bg-zinc-500' :
+                      simState === 'IDLE' ? 'bg-[var(--slate)]' :
                       simState === 'TRIGGERED' || simState === 'VERIFYING' ? 'bg-[var(--flame)]' :
                       simState === 'DISPATCHED' || simState === 'ESCALATED' ? 'bg-[var(--flame)] ring-2 ring-[var(--flame)]/40' :
                       simState === 'ON_SCENE' ? 'bg-[var(--lime)]' :
@@ -226,7 +226,7 @@ export const ArchitectureDeepDive: FC = () => {
 
                 <button
                   onClick={resetSim}
-                  className="p-2 rounded-lg bg-[var(--void)] hover:bg-zinc-800 text-[var(--smoke)] hover:text-white transition-colors cursor-pointer border border-[var(--line-dark)]"
+                  className="p-2 rounded-[var(--r-md)] bg-[var(--void)] hover:bg-[var(--card)] text-[var(--slate)] hover:text-white transition-colors cursor-pointer border border-[var(--line-dark)]"
                   title="Reset Simulator"
                 >
                   <RotateCcw className="w-4 h-4" />
@@ -237,7 +237,7 @@ export const ArchitectureDeepDive: FC = () => {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mt-6 items-start">
               {/* Simulator Controls (6 cols) */}
               <div className="lg:col-span-6 space-y-4">
-                <div className="text-xs font-mono uppercase tracking-wider text-[var(--smoke)] font-semibold">
+                <div className="text-xs font-mono uppercase tracking-wider text-[var(--slate)] font-semibold">
                   Test Scenarios & Signal Injections
                 </div>
 
@@ -245,73 +245,73 @@ export const ArchitectureDeepDive: FC = () => {
                   <button
                     onClick={triggerAnomaly}
                     disabled={simState === 'VERIFYING' || simState === 'DISPATCHED'}
-                    className="p-3.5 rounded-xl bg-[var(--void)] hover:bg-white/[0.04] disabled:opacity-40 text-left transition-all border border-[var(--line-dark)] hover:border-[var(--flame)]/40 text-xs font-mono text-[#f4f4f5] cursor-pointer"
+                    className="p-3.5 rounded-[var(--r-lg)] bg-[var(--void)] hover:bg-white/[0.04] disabled:opacity-40 text-left transition-all border border-[var(--line-dark)] hover:border-[var(--flame)]/40 text-xs font-mono text-[var(--ink)] cursor-pointer"
                   >
                     <div className="font-bold flex items-center gap-1.5 text-white">
                       <Play className="w-3.5 h-3.5 text-[var(--flame)]" />
                       1. Trigger Anomaly
                     </div>
-                    <div className="text-[11px] text-[var(--smoke)] mt-1">Simulate watchOS crash / SpO2 anomaly</div>
+                    <div className="text-[11px] text-[var(--slate)] mt-1">Simulate watchOS crash / SpO2 anomaly</div>
                   </button>
 
                   <button
                     onClick={cancelGrace}
                     disabled={simState !== 'VERIFYING' && simState !== 'TRIGGERED'}
-                    className="p-3.5 rounded-xl bg-[var(--void)] hover:bg-white/[0.04] disabled:opacity-40 text-left transition-all border border-[var(--line-dark)] hover:border-[var(--lime)]/40 text-xs font-mono text-[#f4f4f5] cursor-pointer"
+                    className="p-3.5 rounded-[var(--r-lg)] bg-[var(--void)] hover:bg-white/[0.04] disabled:opacity-40 text-left transition-all border border-[var(--line-dark)] hover:border-[var(--lime)]/40 text-xs font-mono text-[var(--ink)] cursor-pointer"
                   >
                     <div className="font-bold flex items-center gap-1.5 text-white">
                       <CheckCircle className="w-3.5 h-3.5 text-[var(--lime)]" />
                       2. Wearer "I'm OK"
                     </div>
-                    <div className="text-[11px] text-[var(--smoke)] mt-1">Cancels within 10s grace window</div>
+                    <div className="text-[11px] text-[var(--slate)] mt-1">Cancels within 10s grace window</div>
                   </button>
 
                   <button
                     onClick={dispatchAmbulance}
                     disabled={simState !== 'VERIFYING'}
-                    className="p-3.5 rounded-xl bg-[var(--void)] hover:bg-white/[0.04] disabled:opacity-40 text-left transition-all border border-[var(--line-dark)] hover:border-[var(--flame)]/40 text-xs font-mono text-[#f4f4f5] cursor-pointer"
+                    className="p-3.5 rounded-[var(--r-lg)] bg-[var(--void)] hover:bg-white/[0.04] disabled:opacity-40 text-left transition-all border border-[var(--line-dark)] hover:border-[var(--flame)]/40 text-xs font-mono text-[var(--ink)] cursor-pointer"
                   >
                     <div className="font-bold flex items-center gap-1.5 text-white">
                       <AlertTriangle className="w-3.5 h-3.5 text-[var(--flame)]" />
                       3. Grace Window Timeout
                     </div>
-                    <div className="text-[11px] text-[var(--smoke)] mt-1">Auto-dispatches Tier-1 EMS network</div>
+                    <div className="text-[11px] text-[var(--slate)] mt-1">Auto-dispatches Tier-1 EMS network</div>
                   </button>
 
                   <button
                     onClick={injectDuplicatePacket}
                     disabled={simState === 'IDLE' || simState === 'RESOLVED' || simState === 'CANCELLED'}
-                    className="p-3.5 rounded-xl bg-[var(--void)] hover:bg-white/[0.04] disabled:opacity-40 text-left transition-all border border-[var(--line-dark)] hover:border-[var(--flame)]/40 text-xs font-mono text-[#f4f4f5] cursor-pointer"
+                    className="p-3.5 rounded-[var(--r-lg)] bg-[var(--void)] hover:bg-white/[0.04] disabled:opacity-40 text-left transition-all border border-[var(--line-dark)] hover:border-[var(--flame)]/40 text-xs font-mono text-[var(--ink)] cursor-pointer"
                   >
                     <div className="font-bold flex items-center gap-1.5 text-white">
                       <ShieldCheck className="w-3.5 h-3.5 text-[var(--flame)]" />
                       4. Inject Duplicate Packet
                     </div>
-                    <div className="text-[11px] text-[var(--smoke)] mt-1">Proves OCC partial index block</div>
+                    <div className="text-[11px] text-[var(--slate)] mt-1">Proves OCC partial index block</div>
                   </button>
 
                   <button
                     onClick={clinicianOnScene}
                     disabled={simState !== 'DISPATCHED' && simState !== 'ESCALATED'}
-                    className="p-3.5 rounded-xl bg-[var(--void)] hover:bg-white/[0.04] disabled:opacity-40 text-left transition-all border border-[var(--line-dark)] hover:border-[var(--lime)]/40 text-xs font-mono text-[#f4f4f5] cursor-pointer"
+                    className="p-3.5 rounded-[var(--r-lg)] bg-[var(--void)] hover:bg-white/[0.04] disabled:opacity-40 text-left transition-all border border-[var(--line-dark)] hover:border-[var(--lime)]/40 text-xs font-mono text-[var(--ink)] cursor-pointer"
                   >
                     <div className="font-bold flex items-center gap-1.5 text-white">
                       <CheckCircle className="w-3.5 h-3.5 text-[var(--lime)]" />
                       5. Clinician Check-In
                     </div>
-                    <div className="text-[11px] text-[var(--smoke)] mt-1">HMAC GPS handshake on scene</div>
+                    <div className="text-[11px] text-[var(--slate)] mt-1">HMAC GPS handshake on scene</div>
                   </button>
 
                   <button
                     onClick={resolveIncident}
                     disabled={simState !== 'ON_SCENE' && simState !== 'TRANSPORTING'}
-                    className="p-3.5 rounded-xl bg-[var(--void)] hover:bg-white/[0.04] disabled:opacity-40 text-left transition-all border border-[var(--line-dark)] hover:border-[var(--lime)]/40 text-xs font-mono text-[#f4f4f5] cursor-pointer"
+                    className="p-3.5 rounded-[var(--r-lg)] bg-[var(--void)] hover:bg-white/[0.04] disabled:opacity-40 text-left transition-all border border-[var(--line-dark)] hover:border-[var(--lime)]/40 text-xs font-mono text-[var(--ink)] cursor-pointer"
                   >
                     <div className="font-bold flex items-center gap-1.5 text-white">
                       <CheckCircle className="w-3.5 h-3.5 text-[var(--lime)]" />
                       6. Finalize & Resolve
                     </div>
-                    <div className="text-[11px] text-[var(--smoke)] mt-1">Audit log closed, lock released</div>
+                    <div className="text-[11px] text-[var(--slate)] mt-1">Audit log closed, lock released</div>
                   </button>
                 </div>
               </div>
@@ -319,26 +319,26 @@ export const ArchitectureDeepDive: FC = () => {
               {/* Simulator Live Logs (6 cols) */}
               <div className="lg:col-span-6 space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono uppercase tracking-wider text-[var(--smoke)] font-semibold flex items-center gap-1.5">
+                  <span className="text-xs font-mono uppercase tracking-wider text-[var(--slate)] font-semibold flex items-center gap-1.5">
                     <Terminal className="w-3.5 h-3.5 text-[var(--lime)]" />
                     Live Audit Log Stream
                   </span>
-                  <span className="text-[10px] font-mono text-zinc-500">Append-Only Invariant</span>
+                  <span className="text-[10px] font-mono text-[var(--slate)]">Append-Only Invariant</span>
                 </div>
 
-                <div className="p-4 rounded-xl bg-[var(--void)] border border-[var(--line-dark)] font-mono text-xs max-h-[300px] overflow-y-auto space-y-2">
+                <div className="p-4 rounded-[var(--r-lg)] bg-[var(--void)] border border-[var(--line-dark)] font-mono text-xs max-h-[300px] overflow-y-auto space-y-2">
                   {simLogs.map((log, i) => (
                     <div key={i} className="flex items-start gap-2 text-[11px] leading-tight">
-                      <span className="text-zinc-500">{log.timestamp}</span>
-                      <span className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${
+                      <span className="text-[var(--slate)]">{log.timestamp}</span>
+                      <span className={`px-1.5 py-0.5 rounded-[var(--r-sm)] text-[10px] font-bold ${
                         log.level === 'INFO' ? 'bg-[var(--lime)]/15 text-[var(--lime)]' :
-                        log.level === 'WARN' ? 'bg-white/10 text-[var(--smoke)]' :
+                        log.level === 'WARN' ? 'bg-white/10 text-[var(--slate)]' :
                         'bg-[var(--flame)]/15 text-[var(--flame)]'
                       }`}>
                         {log.level}
                       </span>
                       <span className="text-white font-semibold">{log.event}:</span>
-                      <span className="text-[#f4f4f5]">{log.details}</span>
+                      <span className="text-[var(--ink)]">{log.details}</span>
                     </div>
                   ))}
                 </div>
