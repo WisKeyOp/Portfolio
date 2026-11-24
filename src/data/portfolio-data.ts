@@ -296,7 +296,7 @@ export const PROJECTS: Project[] = [
       "Network Partitions & Duplicate Retries: Guaranteed idempotent incident creation via unique constraint deduplication on source telemetry sample IDs.",
       "Double Dispatches: Enforced via PostgreSQL row-level locks and partial unique indices on active incident statuses.",
     ],
-    image: IMG("1584467735874-7065969196b0", 900),
+    image: IMG("1518770660439-4636190af475", 900),
   },
   {
     id: "temporal-pcap",

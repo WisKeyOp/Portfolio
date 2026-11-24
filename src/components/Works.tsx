@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { FC } from 'react';
-import { ShieldCheck, Terminal, ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import { PROJECTS } from '../data/portfolio-data';
 import type { Project } from '../data/portfolio-data';
 
@@ -71,14 +71,12 @@ export const Works: FC<WorksProps> = ({ onSelectProject }) => {
             >
               <header className="wcard__head">
                 <div>
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="px-2 py-0.5 rounded-[var(--r-sm)] text-[10px] font-mono uppercase bg-[var(--flame)]/10 text-[var(--flame-ink)] border border-[var(--flame)]/20 flex items-center gap-1">
-                      <ShieldCheck className="w-3 h-3" />
+                  <div className="wcard__meta">
+                    <span className="text-[var(--flame-ink)] font-semibold">
                       {project.category}
                     </span>
-                    <span className="text-[11px] font-mono text-[var(--slate)]">
-                      // {project.year || '2026'}
-                    </span>
+                    <span>//</span>
+                    <span>{project.year || '2026'}</span>
                   </div>
                   <h3 className="wcard__title">{project.title}</h3>
                 </div>
@@ -87,22 +85,9 @@ export const Works: FC<WorksProps> = ({ onSelectProject }) => {
                 </span>
               </header>
 
-              {/* Technical Metrics & Invariant Summary */}
-              <div className="px-5 pb-3">
-                <p className="text-xs text-[var(--slate)] font-sans line-clamp-2 leading-relaxed">
-                  {project.subtitle}
-                </p>
-                <div className="mt-2.5 flex flex-wrap gap-1.5">
-                  {(project.metrics || []).slice(0, 2).map((metric, idx) => (
-                    <span
-                      key={idx}
-                      className="px-2 py-0.5 rounded-[var(--r-sm)] bg-[var(--mute)] border border-[var(--line)] text-[10px] font-mono text-[var(--slate)]"
-                    >
-                      {metric}
-                    </span>
-                  ))}
-                </div>
-              </div>
+              <p className="wcard__desc">
+                {project.subtitle}
+              </p>
 
               <div className="wcard__tags">
                 {(project.tags || []).map((tag) => (
@@ -113,19 +98,12 @@ export const Works: FC<WorksProps> = ({ onSelectProject }) => {
                 ))}
               </div>
 
-              <div className="wcard__frame relative overflow-hidden group">
+              <div className="wcard__frame">
                 <img 
                   src={project.image || 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=900&q=80'} 
                   alt={project.title} 
                   loading="lazy" 
-                  className="transition-transform duration-700 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-5">
-                  <span className="text-xs font-mono text-white flex items-center gap-1.5">
-                    <Terminal className="w-3.5 h-3.5 text-[var(--lime)]" />
-                    <span>Click to inspect failure modes & OCC invariant</span>
-                  </span>
-                </div>
               </div>
             </article>
           ))}

@@ -13,7 +13,7 @@
   --paper: #f4f3f1;       /* light sections */
   --card: #ffffff;        /* floating cards */
   --mute: #f0efec;        /* inset panels */
-  --slate: #6d6d6d;       /* secondary text */
+  --slate: #595959;       /* secondary text — >=4.5:1 AA compliant on all light surfaces */
   --smoke: #b4b4b4;       /* tertiary text */
   --line: rgba(0, 0, 0, 0.1);
   --line-dark: rgba(255, 255, 255, 0.12);
@@ -99,7 +99,7 @@
   --card: #181818;
   --mute: #1d1d1d;
   --slate: #9d9d9d;
-  --smoke: #6f6f6f;
+  --smoke: #8a8a8a;
   --line: rgba(255, 255, 255, 0.13);
   --invert-bg: #f2f1ef;
   --invert-fg: #0b0b0b;
@@ -1034,7 +1034,7 @@ html.no-js [data-fade] {
   line-height: 1.05;
   letter-spacing: var(--track-tight);
   text-transform: uppercase;
-  color: transparent;
+  color: var(--ink);
   -webkit-text-stroke: 1.4px var(--stroke);
 }
 
@@ -1368,6 +1368,29 @@ html.no-js [data-fade] {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
+}
+
+.wcard__meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.35rem;
+  font-size: var(--fs-micro);
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--slate);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+}
+
+.wcard__desc {
+  margin-top: 0.4rem;
+  font-size: var(--fs-small);
+  color: var(--slate);
+  line-height: 1.55;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .wcard__title {
@@ -1976,7 +1999,7 @@ html.no-js [data-fade] {
 
 .vcard > div > span {
   font-size: var(--fs-small);
-  color: var(--slate);
+  color: var(--on-dark-soft);
 }
 
 .vcard__links {
@@ -2014,7 +2037,7 @@ html.no-js [data-fade] {
   display: block;
   margin-bottom: 0.5rem;
   font-size: var(--fs-small);
-  color: var(--slate);
+  color: var(--on-dark-soft);
 }
 
 .field input,
