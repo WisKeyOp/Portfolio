@@ -28,13 +28,16 @@ export const Logos: FC = () => {
                     key={copy}
                     aria-hidden={copy === 1 ? 'true' : undefined}
                   >
-                    {group.items.map((item) => (
-                      <figure
-                        className="tech"
-                        key={item.name}
-                        style={{ '--brand': item.brand } as React.CSSProperties}
-                        title={item.name}
-                      >
+                    {group.items.map((item) => {
+                      const isNearBlack = item.brand.toLowerCase() === '#0b0b0b' || item.brand.toLowerCase() === '#000000' || item.brand.toLowerCase() === '#111111';
+                      const effectiveBrand = isNearBlack ? 'var(--ink)' : item.brand;
+                      return (
+                        <figure
+                          className="tech"
+                          key={item.name}
+                          style={{ '--brand': effectiveBrand } as React.CSSProperties}
+                          title={item.name}
+                        >
                         <span className="tech__art">
                           {'icon' in item && item.icon ? (
                             <img
@@ -60,7 +63,8 @@ export const Logos: FC = () => {
 
                         <figcaption className="tech__name">{item.name}</figcaption>
                       </figure>
-                    ))}
+                    );
+                  })}
                   </div>
                 ))}
               </div>

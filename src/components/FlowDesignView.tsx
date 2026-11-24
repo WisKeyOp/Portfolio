@@ -383,7 +383,7 @@ def check_drug_interaction(drug_a: str, drug_b: str) -> InteractionResult:
           border: 'border-[var(--line-dark)]',
           bg: 'bg-white/5',
           text: 'text-[var(--smoke)]',
-          dot: 'bg-zinc-400'
+          dot: 'bg-[var(--smoke)]'
         };
     }
   };
@@ -415,7 +415,7 @@ def check_drug_interaction(drug_a: str, drug_b: str) -> InteractionResult:
           <div className="flex items-center gap-2 text-[11px] font-mono text-[var(--smoke)]">
             <span className="w-1.5 h-1.5 rounded-full bg-[var(--lime)]" />
             <span className="text-[var(--lime)] font-semibold">STREAM FLOW ACTIVE</span>
-            <span className="text-zinc-600">|</span>
+            <span className="text-[var(--smoke)]">|</span>
             <span>{nodes.length} STAGES</span>
           </div>
         </div>
@@ -434,7 +434,7 @@ def check_drug_interaction(drug_a: str, drug_b: str) -> InteractionResult:
                   className={`w-full p-4 rounded-xl cursor-pointer transition-all duration-200 border text-left ${
                     isSelected
                       ? `bg-[var(--void)] ${tone.border} shadow-md translate-y-[-2px]`
-                      : 'bg-[var(--void)]/60 border-[var(--line-dark)] hover:border-zinc-500'
+                      : 'bg-[var(--void)]/60 border-[var(--line-dark)] hover:border-[var(--smoke)]'
                   }`}
                 >
                   {/* Step Category & Badge */}
@@ -467,9 +467,9 @@ def check_drug_interaction(drug_a: str, drug_b: str) -> InteractionResult:
 
                 {/* Connecting Arrow (between nodes) */}
                 {index < nodes.length - 1 && (
-                  <div className="flex items-center justify-center py-1 lg:py-0 lg:px-1 text-zinc-500">
+                  <div className="flex items-center justify-center py-1 lg:py-0 lg:px-1 text-[var(--smoke)]">
                     <div className="lg:hidden text-[var(--smoke)] font-mono text-xs">↓</div>
-                    <ArrowRight className="hidden lg:block w-3.5 h-3.5 text-zinc-500" />
+                    <ArrowRight className="hidden lg:block w-3.5 h-3.5 text-[var(--smoke)]" />
                   </div>
                 )}
               </div>
@@ -496,7 +496,7 @@ def check_drug_interaction(drug_a: str, drug_b: str) -> InteractionResult:
 
             <div className="space-y-2">
               {selectedNode.invariants.map((inv, idx) => (
-                <div key={idx} className="flex items-start gap-2.5 text-xs text-[#f4f4f5] leading-relaxed bg-[var(--void)] p-3 rounded-xl border border-[var(--line-dark)]">
+                <div key={idx} className="flex items-start gap-2.5 text-xs text-[var(--ink)] leading-relaxed bg-[var(--void)] p-3 rounded-xl border border-[var(--line-dark)]">
                   <CheckCircle2 className="w-3.5 h-3.5 text-[var(--lime)] mt-0.5 flex-shrink-0" />
                   <span>{inv}</span>
                 </div>
@@ -508,7 +508,7 @@ def check_drug_interaction(drug_a: str, drug_b: str) -> InteractionResult:
                 <AlertTriangle className="w-3.5 h-3.5" />
                 <span>FAILURE MODE DEFENSE:</span>
               </div>
-              <span className="text-[#f4f4f5]">{selectedNode.failureMitigation}</span>
+              <span className="text-[var(--ink)]">{selectedNode.failureMitigation}</span>
             </div>
           </div>
 
@@ -526,7 +526,7 @@ def check_drug_interaction(drug_a: str, drug_b: str) -> InteractionResult:
               </span>
             </div>
 
-            <div className="rounded-xl bg-[var(--void)] border border-[var(--line-dark)] p-4 font-mono text-[11px] text-[#f4f4f5] overflow-x-auto leading-relaxed">
+            <div className="rounded-xl bg-[var(--void)] border border-[var(--line-dark)] p-4 font-mono text-[11px] text-[var(--ink)] overflow-x-auto leading-relaxed">
               <pre>{selectedNode.codeSnippet}</pre>
             </div>
           </div>
