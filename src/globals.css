@@ -280,6 +280,13 @@ h4 {
   opacity: 1;
 }
 
+/* No-JS fallback — immediately show elements when scripts are disabled */
+html.no-js [data-reveal],
+html.no-js [data-fade] {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
 /* ===============================================================
    Buttons
    =============================================================== */
@@ -2298,32 +2305,39 @@ h4 {
 }
 
 /* ===============================================================
-   Reduced motion
+   Reduced motion & Motion Budget
    =============================================================== */
+
+.is-paused,
+.is-paused * {
+  animation-play-state: paused !important;
+}
 
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
-    animation-duration: 0.001ms !important;
+    animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
+    transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
 
-  .strip__row {
-    animation: none;
+  .strip__row,
+  .stack-marquee__track {
+    animation: none !important;
   }
 
-  [data-reveal] {
-    opacity: 1;
-    transform: none;
+  [data-reveal],
+  [data-fade] {
+    opacity: 1 !important;
+    transform: none !important;
   }
 
   .cursor,
   .works__follow,
   .peek {
-    display: none;
+    display: none !important;
   }
 }
 

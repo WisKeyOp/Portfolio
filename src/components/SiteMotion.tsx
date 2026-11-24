@@ -438,6 +438,28 @@ export const SiteMotion: FC = () => {
       on(window, 'resize', fillMarquees);
 
       // -------------------------------------------------------
+      // Motion Budget: Pause decorative loops when off-screen
+      // -------------------------------------------------------
+      if (!reduce && 'IntersectionObserver' in window) {
+        const loopObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              const el = entry.target as HTMLElement;
+              if (entry.isIntersecting) {
+                el.classList.remove('is-paused');
+              } else {
+                el.classList.add('is-paused');
+              }
+            });
+          },
+          { rootMargin: '100px 0px 100px 0px', threshold: 0.02 }
+        );
+
+        $$('.strip, .stack-marquee').forEach((el) => loopObserver.observe(el));
+        cleanups.push(() => loopObserver.disconnect());
+      }
+
+      // -------------------------------------------------------
       // Tech Tiles Back-Out Pop
       // -------------------------------------------------------
       $$('.stack-group').forEach((group) => {
